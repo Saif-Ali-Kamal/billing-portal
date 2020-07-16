@@ -31,7 +31,7 @@ export function login(email, password) {
   });
 }
 
-export function fetchProfile() {
+export function loadProfile() {
   return new Promise((resolve, reject) => {
     client.userManagement.fetchProfile()
       .then((profile) => {

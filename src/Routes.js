@@ -22,6 +22,7 @@ export default () => {
       <Route exact path='/signup' component={Signup} />
       <Route exact path='/forget-password' component={ForgetPassword} />
       <PrivateRoute exact path='/enable-billing' component={AddAccount} />
+      <BillingRoute exact path='/billing/:billingId' component={props => <Redirect to={`/billing/${props.match.params.billingId}/licenses`} />} />
       <BillingRoute exact path='/billing/:billingId/licenses' component={Licenses} />
       <BillingRoute exact path='/billing/:billingId/licenses/purchase' component={PurchaseLicense} />
       <BillingRoute exact path='/billing/:billingId/invoices' component={Invoices} />

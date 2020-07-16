@@ -1,7 +1,10 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router';
 import { notification } from 'antd';
-import { isLoggedIn, isBillingEnabled } from './operations/userManagement';
+import { isLoggedIn, isBillingEnabled, loadProfile, getProfileBillingAccounts } from './operations/userManagement';
+import store from './store';
+import history from "./history";
+import { loadBillingAccounts } from './operations/billingAccount';
 
 export const notify = (type, title, msg, duration) => {
   notification[type]({ message: title, description: msg.toString(), duration: duration });
@@ -12,6 +15,58 @@ export function getToken() {
 }
 export function saveToken(token) {
   localStorage.setItem("token", token)
+}
+
+export function getLastOpenedBillingAccount() {
+  return localStorage.getItem("lastOpenedBillingAccount")
+}
+
+export function setLastOpenedBillingAccount(billingId) {
+  localStorage.setItem("lastOpenedBillingAccount", billingId)
+}
+
+// Opens a specified billing account
+// If no account is specified then in opens the last opened billing account
+// It also saves the opened tab as last opened tab in the local storage
+export function openBillingAccount() {
+  let billingId = getLastOpenedBillingAccount()
+
+  const billingAccounts = getProfileBillingAccounts(store.getState())
+
+  // Use the first billing account from the profile if no information about last billing account opened
+  // or if the last billing account opened is no more present in the user's profile
+  if (!billingId || billingAccounts.findIndex(obj => obj.id === billingId) === -1) {
+    billingId = billingAccounts[0].id
+  }
+
+  history.push(`/billing/${billingId}`)
+}
+
+export function performOnTokenActions() {
+  loadProfile()
+    .then(() => {
+      const billingEnabled = isBillingEnabled()
+      if (!billingEnabled) {
+        history.push("/enable-billing")
+        return
+      }
+
+      // Opens last opened billing account. If no account opened yet, then opens the first account 
+      openBillingAccount()
+
+      // Load information about all the billing accounts in background
+      loadBillingAccounts()
+    })
+}
+
+export function performOnAppLoadActions() {
+  const token = getToken()
+  if (!token) {
+    history.push("signup")
+    return
+  }
+
+  performOnTokenActions()
 }
 
 export const PrivateRoute = ({ component: Component, ...rest }) => {
