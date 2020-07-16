@@ -38,7 +38,7 @@ const SignupForm = (props) => {
           <span style={{ marginLeft:'8px' }}>I have read and agreed to the <a onClick={() => setTermsServices(true)}>Terms of Service</a> and <a onClick={() => setPrivacyPolicy(true)}>Privacy Policy</a></span>
         <Button type='primary' style={{ width:'100%', marginTop:'16px' }} disabled={!checked} onClick={handleSubmit}>Create account</Button>
       </Card>
-      <center><p style={{ color:'rgba(255, 255, 255, 0.6)' }}>Already have an account? <a style={{ color: '#ffffff' }} onClick={() => history.push('/signin')}>Signin</a></p></center>
+      <center><p style={{ color:'rgba(255, 255, 255, 0.6)' }}>Already have an account? <a style={{ color: '#ffffff' }} onClick={() => history.push('/login')}>Signin</a></p></center>
     </React.Fragment>
   );
 }

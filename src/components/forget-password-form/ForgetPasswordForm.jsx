@@ -21,7 +21,7 @@ const ForgetPasswordForm = () => {
         </Form>
         <Button type='primary' style={{ width:'100%', marginTop:'16px' }} >Send email</Button>
       </Card>
-      <center><p style={{ color:'rgba(255, 255, 255, 0.6)' }}>Back to <a style={{ color: '#ffffff' }} onClick={() => history.push('/signin')}>Signin</a></p></center>
+      <center><p style={{ color:'rgba(255, 255, 255, 0.6)' }}>Back to <a style={{ color: '#ffffff' }} onClick={() => history.push('/login')}>Signin</a></p></center>
     </React.Fragment>
   );
 }

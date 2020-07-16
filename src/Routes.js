@@ -1,8 +1,7 @@
 import React from "react";
-import { Router, Route, Redirect, Switch } from "react-router";
+import { Router, Route, Redirect } from "react-router";
 import history from "./history";
-import { PrivateRoute } from './utils';
-
+import { PrivateRoute, BillingRoute } from './utils';
 import Signin from './pages/signin/Sigin';
 import Signup from './pages/signup/Signup';
 import ForgetPassword from './pages/forget-password/ForgetPassword';
@@ -18,20 +17,18 @@ import ContactUs from './pages/contact-us/ContactUs';
 export default () => {
   return (
     <Router history={history}>
-      <Switch>
-        <Route exact path='/' component={() => <Redirect to='/signin'/> } />
-        <Route exact path='/signin' component={Signin} />
-        <Route exact path='/signup' component={Signup} />
-        <Route exact path='/forget-password' component={ForgetPassword} />
-        <Route exact path='/add-account' component={AddAccount} />
-        <Route exact path='/licenses' component={Licenses} /> 
-        <Route exact path='/licenses/purchase' component={PurchaseLicense} /> 
-        <Route exact path='/invoices' component={Invoices} /> 
-        <Route exact path='/promo-codes' component={PomoCodes} /> 
-        <Route exact path='/billing-accounts' component={BillingAccounts} /> 
-        <Route exact path='/billing-accounts/add-account' component={AddBillingAccount} /> 
-        <Route exact path='/contact-us' component={ContactUs} /> 
-      </Switch>
+      <Route exact path='/' component={() => <Redirect to='/signup' />} />
+      <Route exact path='/login' component={Signin} />
+      <Route exact path='/signup' component={Signup} />
+      <Route exact path='/forget-password' component={ForgetPassword} />
+      <PrivateRoute exact path='/enable-billing' component={AddAccount} />
+      <BillingRoute exact path='/billing/:billingId/licenses' component={Licenses} />
+      <BillingRoute exact path='/billing/:billingId/licenses/purchase' component={PurchaseLicense} />
+      <BillingRoute exact path='/billing/:billingId/invoices' component={Invoices} />
+      <BillingRoute exact path='/billing/:billingId/promo-codes' component={PomoCodes} />
+      <BillingRoute exact path='/billing/:billingId/billing-accounts' component={BillingAccounts} />
+      <BillingRoute exact path='/billing/:billingId/billing-accounts/add-account' component={AddBillingAccount} />
+      <BillingRoute exact path='/billing/:billingId/contact-us' component={ContactUs} />
     </Router>
   );
 };

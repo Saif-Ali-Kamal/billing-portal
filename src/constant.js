@@ -8,5 +8,5 @@ const getURL = (productionURL, developmentURL, mockURL) => {
   return mockURL
 }
 
-export const spaceCloudClusterOrigin = getURL(undefined, "http://localhost:4122", undefined)
-export const enterpriseServerGraphQLURL = getURL("https://api.spaceuptech.com/v1/api/spacecloud/graphql", "https://testing.spaceuptech.com/v1/api/spacecloud/graphql", "/v1/api/spacecloud/graphql")
+export const spaceSiteServerURL = getURL("https://api.spaceuptech.com", "https://api.spaceuptech.com", undefined)
+export const billingServerGraphQLURL = getURL("https://billing.spaceuptech.com/v1/api/spacecloud/graphql", "https://testing.spaceuptech.com/v1/api/spacecloud/graphql", "/v1/api/spacecloud/graphql")

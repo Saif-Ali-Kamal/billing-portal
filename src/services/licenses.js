@@ -1,23 +1,50 @@
 import gql from 'graphql-tag';
 class Licenses {
-  constructor(client, spaceSiteClient) {
+  constructor(client) {
     this.client = client;
-    this.spaceSiteClient = spaceSiteClient;
   }
 
-  createSubscription(billingId, invoiceId, promotionCode, prices) {
+  fetchLicenses(billingId) {
     return new Promise((resolve, reject) => {
       this.client.query({
         query: gql`
         query {
-          Create_Subcription(billingId: $billingId, invoiceId: $invoiceId, promotionCode: $promotionCode, prices: $prices) @billing {
+          Fetch_Licenses (billingId: $billingId) @billing {
             status
             error
             message
             result
           }
         }`,
-        variables: { billingId, invoiceId, promotionCode, prices }
+        variables: { billingId }
+      })
+        .then(res => {
+          const { status, error, message, result } = res.data.Fetch_Licenses
+          if (status !== 200) {
+            reject(message)
+            console.log("Error fetching licenses", error)
+            return
+          }
+
+          resolve(result)
+        })
+        .catch(ex => reject(ex))
+    })
+  }
+
+  createSubscription(billingId, plans, cardId) {
+    return new Promise((resolve, reject) => {
+      this.client.query({
+        query: gql`
+        query {
+          Create_Subcription(billingId: $billingId, plans: $plans${cardId ? ", cardId: $cardId" : ""}) @billing {
+            status
+            error
+            message
+            result
+          }
+        }`,
+        variables: { billingId, plans, cardId }
       })
         .then(res => {
           const { status, error, message, result } = res.data.create_Subscription
@@ -26,34 +53,70 @@ class Licenses {
             console.log("Error creating subscription", error)
             return
           }
-          resolve(result)
+
+          const { subscription, licenses } = result
+
+          if (!subscription || subscription.status !== "active") {
+            reject(message)
+            console.log("Error creating subscription", error)
+            return
+          }
+
+          resolve(licenses)
         })
         .catch(ex => reject(ex))
     })
   }
 
-  deactivateLicense(license) {
+  deactivateLicense(billingId, licenses) {
     return new Promise((resolve, reject) => {
       this.client.query({
         query: gql`
         query {
-          Deactivate_License(license: $license) @billing {
+          Deactivate_License(licenses: $licenses, billingId: $billingId) @billing {
             status
             error
             message
-            result
           }
         }`,
-        variables: { license }
+        variables: { billingId, licenses }
       })
         .then(res => {
-          const { status, error, message, result } = res.data.Deactivate_License
+          const { status, error, message } = res.data.Deactivate_License
           if (status !== 200) {
             reject(message)
-            console.log("Error deactivate license", error)
+            console.log("Error deactivating licenses", error)
             return
           }
-          resolve(result)
+
+          resolve()
+        })
+        .catch(ex => reject(ex))
+    })
+  }
+
+  renewLicense(billingId, licenses) {
+    return new Promise((resolve, reject) => {
+      this.client.query({
+        query: gql`
+        query {
+          Renew_License(licenses: $licenses, billingId: $billingId) @billing {
+            status
+            error
+            message
+          }
+        }`,
+        variables: { billingId, licenses }
+      })
+        .then(res => {
+          const { status, error, message } = res.data.Renew_License
+          if (status !== 200) {
+            reject(message)
+            console.log("Error renewing licenses", error)
+            return
+          }
+
+          resolve()
         })
         .catch(ex => reject(ex))
     })

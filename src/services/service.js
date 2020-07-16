@@ -1,7 +1,6 @@
-import gql from 'graphql-tag';
-import { spaceCloudClusterOrigin, enterpriseServerGraphQLURL } from "../constant"
+import { spaceSiteServerURL, billingServerGraphQLURL } from "../constant"
 import { getToken } from "../utils"
-import { createGraphQLClient } from "./client";
+import { createGraphQLClient, createRESTClient } from "./client";
 
 import BillingAccount from './billingAccount';
 import Invoices from './invoices';
@@ -12,33 +11,33 @@ import UserManagement from './userManagement';
 
 class Service {
   constructor(token) {
-    this.client = createGraphQLClient(enterpriseServerGraphQLURL, getToken)
-    this.userManagement = new UserManagement(this.client)
-    this.billingAccount = new BillingAccount(this.client)
-    this.invoices = new Invoices(this.client)
-    this.licenses = new Licenses(this.client)
-    this.promoCodes = new PromoCodes(this.client) 
-    if (token) this.client.setToken(token);
+    this.billingClient = createGraphQLClient(billingServerGraphQLURL, getToken)
+    this.spaceSiteClient = createRESTClient(spaceSiteServerURL, { credentials: "omit" })
+    this.userManagement = new UserManagement(this.billingClient)
+    this.billingAccount = new BillingAccount(this.billingClient)
+    this.invoices = new Invoices(this.billingClient)
+    this.licenses = new Licenses(this.billingClient)
+    this.promoCodes = new PromoCodes(this.billingClient)
+    if (token) this.billingClient.setToken(token);
   }
 
-  execGraphQLQuery(projectId, graphqlQuery, variables, token) {
-    let uri = `/v1/api/${projectId}/graphql`
-    if (spaceCloudClusterOrigin) {
-      uri = "http://localhost:4122" + uri;
-    }
-    const client = createGraphQLClient(uri, () => token)
+  contactUs(email, name, subject, msg) {
     return new Promise((resolve, reject) => {
-      if (graphqlQuery.includes("mutation")) {
-        client.mutate({
-          mutation: gql`${graphqlQuery}`,
-          variables: variables
-        }).then(({ data, errors }) => resolve({ data, errors })).catch(ex => reject(ex))
-      } else {
-        client.query({
-          query: gql`${graphqlQuery}`,
-          variables: variables
-        }).then(({ data, errors }) => resolve({ data, errors })).catch(ex => reject(ex))
-      }
+      const body = { email, name, subject, msg, source: "Billing Portal" }
+      this.spaceSiteClient.postJSON("/v1/site/contact-us", body)
+        .then(({ status, data }) => {
+          if (status !== 200) {
+            reject(new Error("Internal server error"))
+            return
+          }
+          if (!data.ack) {
+            reject(new Error("Internal server error"))
+            return
+          }
+
+          resolve()
+        })
+        .catch(ex => reject(ex))
     })
   }
 }

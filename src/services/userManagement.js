@@ -23,16 +23,24 @@ class UserManagement {
           const { status, error, message, result } = res.data.Sign_Up
           if (status !== 200) {
             reject(message)
-            console.log("Signup Error", error)
+            console.log("Error in signup", error)
             return
           }
-          resolve(result)
+
+          const token = result.token
+
+          if (!token) {
+            reject(new Error("Token not provided by backend"))
+            return
+          }
+
+          resolve(token)
         })
         .catch(ex => reject(ex))
     })
   }
 
-  signIn(email, password) {
+  login(email, password) {
     return new Promise((resolve, reject) => {
       this.client.query({
         query: gql`
@@ -53,12 +61,43 @@ class UserManagement {
             console.log("Signin Error", error)
             return
           }
-          const { token } = result
+
+          const token = result.token
+
           if (!token) {
-            reject(new Error("Token not provided"))
+            reject(new Error("Token not provided by backend"))
             return
           }
+
           resolve(token)
+        })
+        .catch(ex => reject(ex))
+    })
+  }
+
+  fetchProfile() {
+    return new Promise((resolve, reject) => {
+      this.client.query({
+        query: gql`
+        query {
+          Fetch_Profile @users {
+            status
+            error
+            message
+            result
+          }
+        }`,
+        variables: {}
+      })
+        .then(res => {
+          const { status, error, message, result } = res.data.Fetch_Profile
+          if (status !== 200) {
+            reject(message)
+            console.log("Error fetching profile", error)
+            return
+          }
+
+          resolve(result)
         })
         .catch(ex => reject(ex))
     })
@@ -73,46 +112,46 @@ class UserManagement {
             status
             error
             message
-            result
           }
         }`,
         variables: { email }
       })
         .then(res => {
-          const { status, error, message, result } = res.data.Forgot_Pass_Generate_Code
+          const { status, error, message } = res.data.Forgot_Pass_Generate_Code
           if (status !== 200) {
             reject(message)
-            console.log("Error sending email", error)
+            console.log("Error generating code for forgot password", error)
             return
           }
-          resolve(result)
+
+          resolve()
         })
         .catch(ex => reject(ex))
     })
   }
 
-  forgotPasswordVerifyCode(code, userId, password) {
+  forgotPasswordVerifyCode(code, password) {
     return new Promise((resolve, reject) => {
       this.client.query({
         query: gql`
         query {
-          Forgot_Pass_Verify_Code(code: $code, userId: $userId, password: $password) @users {
+          Forgot_Pass_Verify_Code(code: $code, password: $password) @users {
             status
             error
             message
-            result
           }
         }`,
-        variables: { code, userId, password }
+        variables: { code, password }
       })
         .then(res => {
-          const { status, error, message, result } = res.data.Forgot_Pass_Verify_Code
+          const { status, error, message } = res.data.Forgot_Pass_Verify_Code
           if (status !== 200) {
             reject(message)
-            console.log("Error changing password", error)
+            console.log("Error verifying code for forgot password", error)
             return
           }
-          resolve(result)
+
+          resolve()
         })
         .catch(ex => reject(ex))
     })
@@ -127,19 +166,19 @@ class UserManagement {
             status
             error
             message
-            result
           }
         }`,
         variables: { oldPassword, newPassword }
       })
         .then(res => {
-          const { status, error, message, result } = res.data.Change_Password
+          const { status, error, message } = res.data.Change_Password
           if (status !== 200) {
             reject(message)
             console.log("Error changing password", error)
             return
           }
-          resolve(result)
+
+          resolve()
         })
         .catch(ex => reject(ex))
     })
@@ -166,34 +205,35 @@ class UserManagement {
             console.log("Error verifing email", error)
             return
           }
+
           resolve(result)
         })
         .catch(ex => reject(ex))
     })
   }
 
-  resendVerifyEmail(code) {
+  resendEmailVerificationCode() {
     return new Promise((resolve, reject) => {
       this.client.query({
         query: gql`
         query {
-          Resend_Verify_Email @users {
+          Resend_VerificatIon_Email @users {
             status
             error
             message
-            result
           }
         }`,
-        variables: {  }
+        variables: {}
       })
         .then(res => {
-          const { status, error, message, result } = res.data.Resend_Verify_Email
+          const { status, error, message } = res.data.Resend_VerificatIon_Email
           if (status !== 200) {
             reject(message)
             console.log("Error resending verification email", error)
             return
           }
-          resolve(result)
+
+          resolve()
         })
         .catch(ex => reject(ex))
     })
