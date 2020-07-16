@@ -1,0 +1,60 @@
+{
+  "name": "billing",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@craco/craco": "^5.6.4",
+    "@stripe/react-stripe-js": "^1.1.2",
+    "@stripe/stripe-js": "^1.7.0",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
+    "antd": "^4.3.3",
+    "apollo-boost": "^0.4.9",
+    "apollo-cache-inmemory": "^1.6.6",
+    "apollo-client": "^2.6.10",
+    "apollo-link-context": "^1.0.20",
+    "apollo-link-http": "^1.5.17",
+    "automate-redux": "^1.1.0",
+    "babel-plugin-import": "^1.13.0",
+    "craco-less": "^1.17.0",
+    "graphql": "^15.3.0",
+    "graphql-tag": "^2.10.4",
+    "less": "^3.11.3",
+    "less-loader": "^6.1.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-ga": "^3.0.0",
+    "react-redux": "^7.2.0",
+    "react-router": "^5.2.0",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.1",
+    "redux": "^4.0.5",
+    "space-api": "^0.18.2"
+  },
+  "scripts": {
+    "start": "craco start",
+    "start:no-mock": "REACT_APP_DISABLE_MOCK='true' craco start",
+    "build": "GENERATE_SOURCEMAP=false craco build",
+    "test": "craco test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "miragejs": "^0.1.40"
+  }
+}
