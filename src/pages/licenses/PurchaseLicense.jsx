@@ -8,9 +8,15 @@ import ProjectPageLayout, { InnerTopBar, Content } from '../../components/projec
 import SelectPlan from '../../components/licenses/purchase-license/select-plan/SelectPlan';
 import SubscriptionDetail from '../../components/licenses/purchase-license/subscription-detail/SubcriptionDetail';
 import ApplyLicenseKey from '../../components/licenses/purchase-license/apply-license-key/ApplyLicenseKey';
+import { getCards } from "../../operations/billingAccount"
+import { createSubscription } from "../../operations/licenses";
+import { notify, incrementPendingRequests, decrementPendingRequests } from '../../utils';
+import { useSelector } from 'react-redux';
+import { plans } from '../../constant';
+
 const { Step } = Steps;
 
-const Licenses = () => {
+const PurchaseLicense = () => {
   useEffect(() => {
     ReactGA.pageview("/billing/licenses/purchase-license");
   }, [])
@@ -18,16 +24,42 @@ const Licenses = () => {
   const history = useHistory();
   const { billingId } = useParams();
 
+  // Component state
   const [current, setCurrent] = useState(0);
+  const [selectedPlanId, setSelectedPlanId] = useState("")
+  const [purchasedLicenseId, setPurchasedLicenseId] = useState("1b6b8a79-d4c6-45c8-a4a9-84ff6ec6036d")
 
-  const handleContactUs = () => history.push(`/billing/${billingId}/contact-us`)
+  // Global state
+  const cards = useSelector(state => getCards(state, billingId))
 
+  // Derived state
+  const selectedPlanDetails = plans.find(obj => obj.id === selectedPlanId)
+
+  // Handlers
+  const handleContactUs = (subject) => history.push(`/billing/${billingId}/contact-us`, { subject })
+
+  const handleSelectPlan = (planId) => {
+    setSelectedPlanId(planId)
+    setCurrent(current + 1)
+  }
+
+  const handlePurchaseLicense = (cardId) => {
+    incrementPendingRequests()
+    createSubscription(billingId, selectedPlanId, cardId)
+      .then((licenseId) => {
+        notify("success", "Success", "Purchased license successfully")
+        setPurchasedLicenseId(licenseId)
+        setCurrent(current + 1)
+      })
+      .catch(ex => notify("error", "Error purchasing license", ex))
+      .finally(() => decrementPendingRequests())
+  }
   const steps = [{
     title: 'Select license',
     content: <React.Fragment>
       <Row>
         <Col lg={{ span: 18, offset: 3 }}>
-          <SelectPlan selectedPlan='space-cloud-open' handleContactUs={handleContactUs} handleSelectPlan={() => setCurrent(current + 1)} />
+          <SelectPlan handleContactUs={handleContactUs} handleSelectPlan={handleSelectPlan} />
         </Col>
       </Row>
     </React.Fragment>
@@ -35,8 +67,8 @@ const Licenses = () => {
   {
     title: 'Start subscription',
     content: <Row>
-      <Col lg={{ span: 18, offset: 3 }}>
-        <SubscriptionDetail handleSuccess={() => setCurrent(current + 1)} />
+      <Col lg={{ span: 12, offset: 6 }}>
+        <SubscriptionDetail handleSuccess={handlePurchaseLicense} planDetails={selectedPlanDetails} creditCards={cards} />
       </Col>
     </Row>
   },
@@ -44,7 +76,7 @@ const Licenses = () => {
     title: 'Apply license key',
     content: <Row>
       <Col lg={{ span: 18, offset: 3 }}>
-        <ApplyLicenseKey />
+        <ApplyLicenseKey licenseId={purchasedLicenseId} />
       </Col>
     </Row>
   }]
@@ -72,4 +104,4 @@ const Licenses = () => {
   );
 }
 
-export default Licenses;
+export default PurchaseLicense;

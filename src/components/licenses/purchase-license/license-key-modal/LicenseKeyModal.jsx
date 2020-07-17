@@ -2,12 +2,12 @@ import React from 'react';
 import Modal from 'antd/lib/modal/Modal';
 import { Card, Typography } from 'antd';
 
-const LicenseKeyModal = (props) => {
+const LicenseKeyModal = ({ handleCancel, licenseKey, licenseSecret }) => {
   return (
     <Modal
       title='Steps to apply license key'
       visible={true}
-      onCancel={props.handleCancel}
+      onCancel={handleCancel}
       footer={null} >
       <ol style={{ padding: 16 }}>
         <li>Open Mission Control (Admin UI) of the Space Cloud cluster.</li>
@@ -19,8 +19,8 @@ const LicenseKeyModal = (props) => {
       </ol>
       <Card>
         <h3><b>License Key Details</b></h3>
-        <p><b>Key</b>: <Typography.Paragraph style={{ display: "inline" }} copyable ellipsis>lic_fg982uy3hekajs87y</Typography.Paragraph></p>
-        <p><b>Secret</b>: <Typography.Paragraph style={{ display: "inline" }} copyable={{ text: 'lic_fg982uy3hekajs87y' }} ellipsis>*********************</Typography.Paragraph></p>
+        <p><b>Key</b>: <Typography.Paragraph style={{ display: "inline" }} copyable ellipsis>{licenseKey}</Typography.Paragraph></p>
+        <p><b>Secret</b>: <Typography.Paragraph style={{ display: "inline" }} copyable={{ text: licenseSecret }} ellipsis>*********************</Typography.Paragraph></p>
       </Card>
     </Modal>
   );

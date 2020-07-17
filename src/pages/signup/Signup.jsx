@@ -1,30 +1,30 @@
 import React from 'react';
+import { useHistory } from 'react-router';
 import SignupForm from '../../components/signup-form/SignupForm';
 import './signup.css';
 import { signup } from '../../operations/userManagement';
-import { increment, decrement } from 'automate-redux';
-import { useDispatch } from 'react-redux';
-import { notify } from '../../utils';
+import { notify, incrementPendingRequests, decrementPendingRequests } from '../../utils';
 
 
 const Signup = () => {
-
-  const dispatch = useDispatch();
-  
+  const history = useHistory()
   const handleSignup = (name, organizationName, email, password) => {
-    dispatch(increment("pendingRequests"));
-    signup(name, organizationName, email, password).then(() => {
-      notify('sucess', 'Sucess', 'Sucessfully signup');
-    }).catch(error => notify('error', 'Error', error.toString()))
-    .finally(() => dispatch(decrement("pendingRequests")))
+    incrementPendingRequests()
+    signup(name, organizationName, email, password)
+      .then(() => {
+        notify('sucess', 'Sucess', 'Signup successful')
+        history.push("/enable-billing")
+      })
+      .catch(ex => notify('error', 'Error in signup', ex))
+      .finally(() => decrementPendingRequests())
   }
 
-  return(
+  return (
     <React.Fragment>
       <div className='signup-background'>
         <div className='signup-card'>
-            <SignupForm handleSignup={handleSignup} />
-          </div>
+          <SignupForm handleSubmit={handleSignup} />
+        </div>
       </div>
     </React.Fragment>
   );

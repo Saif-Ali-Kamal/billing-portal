@@ -1,12 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactGA from 'react-ga';
 import Topbar from '../../components/topbar/Topbar';
 import Sidenav from '../../components/sidenav/Sidenav';
 import ProjectPageLayout, { Content } from '../../components/project-page-layout/ProjectPageLayout';
 import { Row, Col, Card, Button } from 'antd';
 import avatarSvg from '../../assets/avatar.svg';
-import { getProfile } from '../../operations/userManagement';
+import { getProfile, changePassword } from '../../operations/userManagement';
 import { useSelector } from 'react-redux';
+import ChangePassword from "../../components/change-password/ChangePassword";
+import { incrementPendingRequests, decrementPendingRequests, notify } from '../../utils';
 
 const Profile = () => {
   useEffect(() => {
@@ -16,6 +18,25 @@ const Profile = () => {
   // Global state
   const { name, email, createdOn } = useSelector(state => getProfile(state))
 
+  // Component state
+  const [modalVisible, setModalVisible] = useState(false)
+
+  // Handlers
+  const handleChangePassword = (currentPassword, newPassword) => {
+    return new Promise((resolve, reject) => {
+      incrementPendingRequests()
+      changePassword(currentPassword, newPassword)
+        .then(() => {
+          notify("success", "Success", "Changed password successfully")
+          resolve()
+        })
+        .catch(ex => {
+          notify("error", "Error changing password", ex)
+          reject()
+        })
+        .finally(() => decrementPendingRequests())
+    })
+  }
   return (
     <React.Fragment>
       <Topbar showBillingSelector />
@@ -37,11 +58,12 @@ const Profile = () => {
                       </div>
                     </div>
                   </div>
-                  <Button> Change password</Button>
+                  <Button onClick={() => setModalVisible(true)}> Change password</Button>
                 </div>
               </Card>
             </Col>
           </Row>
+          {modalVisible && <ChangePassword handleSubmit={handleChangePassword} handleCancel={() => setModalVisible(false)} />}
         </Content>
       </ProjectPageLayout>
     </React.Fragment>

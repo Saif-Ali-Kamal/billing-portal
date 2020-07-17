@@ -1,18 +1,29 @@
 import React, { useState } from 'react'
 import { MenuOutlined, DownOutlined } from '@ant-design/icons';
-import { Button, Menu, Popover, Row, Col, Divider, Dropdown, message } from 'antd';
+import { Button, Menu, Popover, Row, Col, Dropdown } from 'antd';
 import './topbar.css'
 import store from "../../store"
 import { set } from "automate-redux"
 import logo from '../../assets/logo-black.svg';
 import upLogo from '../../logo.png';
 import avatarSvg from '../../assets/avatar.svg';
-import ChangePassword from '../change-password/ChangePassword';
+import { useParams } from 'react-router';
+import { useSelector } from 'react-redux';
+import { getProfileBillingAccounts } from '../../operations/userManagement';
+import { openBillingAccount } from '../../utils';
 
 const Topbar = (props) => {
-  const [account, setAccount] = useState('billing-account-1')
-  const [changePasswordVisible, setChangePasswordVisible] = useState(false)
+  const { billingId } = useParams()
+
+  // Global state
+  const billingAccounts = useSelector(state => getProfileBillingAccounts(state))
+
+  // Component state
   const [popoverVisible, setPopoverVisible] = useState(false)
+
+  // Derived state
+  const selectedBillingAccount = billingAccounts.find(obj => obj.id === billingId)
+  const selectedBillingAccountName = selectedBillingAccount ? selectedBillingAccount.name : ""
 
   const handleLogout = () => {
     localStorage.clear();
@@ -32,15 +43,9 @@ const Topbar = (props) => {
     </Row>
   );
 
-  const selectAccount = ({ key }) => {
-    setAccount(key);
-  };
-
   const menu = (
-    <Menu onClick={selectAccount}>
-      <Menu.Item key="billing-account-1">Billing account 1</Menu.Item>
-      <Menu.Item key="billing-account-2">Billing account 2</Menu.Item>
-      <Menu.Item key="billing-account-3">Billing account 3</Menu.Item>
+    <Menu onClick={({ key }) => openBillingAccount(key)}>
+      {billingAccounts.map(obj => <Menu.Item key={obj.id}>{obj.name}</Menu.Item>)}
     </Menu>
   );
 
@@ -54,8 +59,8 @@ const Topbar = (props) => {
         <img className="upLogo" src={upLogo} alt="logo" />
         {props.showBillingSelector && <div className="btn-position" >
           <Dropdown overlay={menu} trigger={['click']}>
-            <a className="ant-dropdown-link btn-rounded" onClick={e => e.preventDefault()} >
-              {account} <DownOutlined style={{ marginLeft: '16px' }} />
+            <a className="ant-dropdown-link btn-rounded" style={{ cursor: "pointer" }} onClick={e => e.preventDefault()} >
+              {selectedBillingAccountName} <DownOutlined style={{ marginLeft: '16px' }} />
             </a>
           </Dropdown>
         </div>}
@@ -65,7 +70,6 @@ const Topbar = (props) => {
             <img src={avatarSvg} style={{ cursor: 'pointer' }} onClick={() => setPopoverVisible(true)} />
           </Popover>
         </div>
-        {changePasswordVisible && <ChangePassword handleCancel={() => setChangePasswordVisible(false)} />}
       </div>
     </div>
   );

@@ -2,27 +2,26 @@ import React from 'react';
 import SigninForm from '../../components/signin-form/SigninForm';
 import './signin.css'
 import { login } from '../../operations/userManagement';
-import { increment, decrement } from 'automate-redux';
-import { useDispatch } from 'react-redux';
-import { notify } from '../../utils';
+import { notify, incrementPendingRequests, decrementPendingRequests, performOnTokenActions } from '../../utils';
 
 const Signin = () => {
 
-  const dispatch = useDispatch();
-
   const handleSignin = (email, password) => {
-    dispatch(increment("pendingRequests"));
-    login(email, password).then(() => {
-      notify('sucess', 'Sucess', 'Sucessfully signin');
-    }).catch(error => notify('error', 'Error', error.toString()))
-      .finally(() => dispatch(decrement("pendingRequests")))
+    incrementPendingRequests()
+    login(email, password)
+      .then(() => {
+        notify('sucess', 'Sucess', 'Login successful');
+        performOnTokenActions()
+      })
+      .catch(ex => notify('error', 'Error in login', ex))
+      .finally(() => decrementPendingRequests())
   }
 
   return (
     <React.Fragment>
       <div className='signin-background'>
         <div className='signin-card'>
-          <SigninForm handleSignin={handleSignin} />
+          <SigninForm handleSubmit={handleSignin} />
         </div>
       </div>
     </React.Fragment>

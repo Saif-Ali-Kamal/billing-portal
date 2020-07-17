@@ -5,6 +5,15 @@ import { isLoggedIn, isBillingEnabled, loadProfile, getProfileBillingAccounts } 
 import store from './store';
 import history from "./history";
 import { loadBillingAccounts } from './operations/billingAccount';
+import { increment, decrement } from 'automate-redux';
+
+export function incrementPendingRequests() {
+  store.dispatch(increment("pendingRequests"))
+}
+
+export function decrementPendingRequests() {
+  store.dispatch(decrement("pendingRequests"))
+}
 
 export const notify = (type, title, msg, duration) => {
   notification[type]({ message: title, description: msg.toString(), duration: duration });
@@ -33,13 +42,16 @@ export function setLastOpenedBillingAccount(billingId) {
 // Opens a specified billing account
 // If no account is specified then in opens the last opened billing account
 // It also saves the opened tab as last opened tab in the local storage
-export function openBillingAccount() {
-  let billingId = getLastOpenedBillingAccount()
+export function openBillingAccount(billingId) {
+  // If no billing id is specified use the last opened billing id
+  if (!billingId) {
+    billingId = getLastOpenedBillingAccount()
+  }
 
   const billingAccounts = getProfileBillingAccounts(store.getState())
 
-  // Use the first billing account from the profile if no information about last billing account opened
-  // or if the last billing account opened is no more present in the user's profile
+  // Use the first billing account from the profile if no billing id specified
+  // or if the specified billing id is no more present in the user's profile
   if (!billingId || billingAccounts.findIndex(obj => obj.id === billingId) === -1) {
     billingId = billingAccounts[0].id
   }
@@ -50,7 +62,7 @@ export function openBillingAccount() {
 export function performOnTokenActions() {
   loadProfile()
     .then(() => {
-      const billingEnabled = isBillingEnabled()
+      const billingEnabled = isBillingEnabled(store.getState())
       if (!billingEnabled) {
         history.push("/enable-billing")
         return
@@ -95,7 +107,7 @@ export const BillingRoute = ({ component: Component, ...rest }) => {
     <Route
       {...rest}
       render={props =>
-        !isBillingEnabled() ? (
+        !isBillingEnabled(store.getState()) ? (
           <Redirect to='/enable-billing' />
         ) : (
             <Component {...props} />

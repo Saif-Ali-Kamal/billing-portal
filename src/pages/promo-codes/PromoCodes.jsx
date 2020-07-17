@@ -1,56 +1,85 @@
 import React, { useState, useEffect } from 'react';
 import ReactGA from 'react-ga';
 import { Row, Col, Button, Table } from 'antd';
-import { useHistory } from 'react-router';
+import { useParams } from 'react-router';
 import Topbar from '../../components/topbar/Topbar';
 import Sidenav from '../../components/sidenav/Sidenav';
 import ProjectPageLayout, { Content } from '../../components/project-page-layout/ProjectPageLayout';
 import ApplyCouponModal from '../../components/promo-codes/ApplyCouponModal';
 import emptyStateSvg from '../../assets/rabit.svg';
+import { incrementPendingRequests, decrementPendingRequests, notify } from '../../utils';
+import { loadPromoCodes, applyPromoCode, getPromoCodes } from '../../operations/promoCodes';
+import { useSelector } from 'react-redux';
+import { getBillingAccountCountry } from '../../operations/billingAccount';
 
 const PromoCodes = () => {
+  const { billingId } = useParams();
+
   useEffect(() => {
     ReactGA.pageview("/billing/promo-codes");
   }, [])
 
-  const history = useHistory();
+  useEffect(() => {
+    incrementPendingRequests()
+    loadPromoCodes()
+      .catch(ex => notify("error", "Error fetching promo codes", ex))
+      .finally(() => decrementPendingRequests())
+  }, [billingId])
+
+  // Global state
+  const promoCodes = useSelector(state => getPromoCodes(state))
+  const billingCountry = useSelector(state => getBillingAccountCountry(state, billingId))
+
+  // Component state
   const [applyCouponModal, setApplyCouponModal] = useState(false)
+
+  // Handlers 
+  const handleApplyPromoCode = (promoCode) => {
+    return new Promise((resolve, reject) => {
+      incrementPendingRequests()
+      applyPromoCode(billingId, promoCode)
+        .then((amount) => {
+          const currencyNotation = billingCountry === "IN" ? "₹" : "$"
+          notify("success", "Success", `Applied promo code successfully. ${currencyNotation}${amount} credited to your billing account`)
+          resolve()
+        })
+        .catch((ex) => {
+          notify("error", "Error applying promo codes", ex)
+          reject(ex)
+        })
+        .finally(() => decrementPendingRequests())
+    })
+  }
+
   const emptyState =
     <Row >
       <Col lg={{ span: 12, offset: 5 }} style={{ textAlign: "center", marginTop: "72px" }}>
         <img src={emptyStateSvg} />
         <p style={{ margin: "16px 0 24px 0" }}>No promo codes applied to this billing account yet. Apply a promo code to get free credits!</p>
-        <Button style={{ width: "45%", borderRadius: "10px" }} type="primary" onClick={() => setApplyCouponModal(true)}>Apply a promo code</Button>
+        <Button style={{ width: "45%", borderRadius: "100px" }} size="large" type="primary" onClick={() => setApplyCouponModal(true)}>Apply a promo code</Button>
       </Col>
     </Row>
 
-  const promoCodeColumn = [{
-    title: 'Codes',
-    dataIndex: 'code',
-    key: 'code',
-  }, {
-    title: "Amount",
-    dataIndex: "amount",
-    key: "amount",
-    render: (_, { amount, currency = "usd" }) => {
-      const currencyNotation = currency.toLowerCase() === "inr" ? "₹" : "$"
-      return `${currencyNotation}${amount / 100}`
+  const promoCodeColumn = [
+    {
+      title: 'Promotion Code',
+      dataIndex: 'promotionId',
+      key: 'promotionId',
+    },
+    {
+      title: "Amount",
+      dataIndex: "amount",
+      key: "amount",
+      render: (_, { amount }) => {
+        const currencyNotation = billingCountry === "IN" ? "₹" : "$"
+        return `${currencyNotation} ${amount / 100}`
+      }
+    },
+    {
+      title: 'Applied on',
+      render: (_, { time_stamp }) => time_stamp.toISOString()
     }
-  }, {
-    title: 'Applied on',
-    dataIndex: 'date',
-    key: 'date',
-  }]
-
-  const data = [{
-    code: 'i_love_spacecloud',
-    amount: 2500,
-    date: '21 march, 2020'
-  }, {
-    code: 'awesome_heroku_alternative',
-    amount: 2500,
-    date: '21 march, 2020'
-  }]
+  ]
 
   return (
     <React.Fragment>
@@ -58,11 +87,14 @@ const PromoCodes = () => {
       <Sidenav selectedItem='promo-codes' />
       <ProjectPageLayout>
         <Content>
-          <h3 style={{ display: "flex", justifyContent: "space-between" }}>Applied promo codes<Button onClick={() => setApplyCouponModal(true)} type="primary">Apply a promo codes</Button></h3>
-          <Table columns={promoCodeColumn} dataSource={data} bordered style={{ marginTop: 16 }} />
+          {promoCodes.length === 0 && emptyState}
+          {promoCodes.length > 0 && <React.Fragment>
+            <h3 style={{ display: "flex", justifyContent: "space-between" }}>Applied promo codes<Button onClick={() => setApplyCouponModal(true)} type="primary">Apply a promo codes</Button></h3>
+            <Table columns={promoCodeColumn} dataSource={promoCodes} bordered style={{ marginTop: 16 }} />
+          </React.Fragment>}
         </Content>
       </ProjectPageLayout>
-      {applyCouponModal && <ApplyCouponModal handleCancel={() => setApplyCouponModal(false)} />}
+      {applyCouponModal && <ApplyCouponModal handleSubmit={handleApplyPromoCode} handleCancel={() => setApplyCouponModal(false)} />}
     </React.Fragment>
   );
 }

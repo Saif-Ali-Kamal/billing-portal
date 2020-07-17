@@ -100,16 +100,14 @@ export const addBillingAccountToProfile = (id, name) => {
   store.dispatch(set("profile.billingAccounts", newBillingAccounts))
 }
 
-export const isLoggedIn = () => {
-  // const token = getToken()
-  // return token ? true : false
-  return true
+export function isLoggedIn() {
+  const token = getToken()
+  return token ? true : false
 }
-export const isEmailVerified = () => {
-  // return getProfile(store.getState()).isEmailVerified
-  return true
+export function isEmailVerified(state) {
+  return getProfile(state).isEmailVerified
 }
-export const isBillingEnabled = () => {
-  // return getProfileBillingAccounts(store.getState()).length > 0
-  return true
+
+export function isBillingEnabled(state) {
+  return getProfileBillingAccounts(state).length > 0
 }

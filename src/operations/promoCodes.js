@@ -1,7 +1,6 @@
 import client from '../client';
 import store from '../store';
 import { set, get } from 'automate-redux';
-import { getBillingAccountInfo } from './billingAccount';
 
 export function loadPromoCodes(billingId) {
   return new Promise((resolve, reject) => {
@@ -28,12 +27,12 @@ export function applyPromoCode(billingId, promoCode) {
         const newPromoCodes = [...promoCodes, promoCodeDetails]
         setPromoCodes(newPromoCodes)
 
-        resolve()
+        resolve(amount)
       })
       .catch(error => reject(error))
   });
 }
 
 // Getters and setters
-const getPromoCodes = (state) => get(state, "promoCodes", [])
+export const getPromoCodes = (state) => get(state, "promoCodes", [])
 const setPromoCodes = (promoCodes) => store.dispatch(set("promoCodes", promoCodes))

@@ -1,3 +1,21 @@
+export const stripeKey = "pk_test_86Z4cMrqx8qC7bHLa0nLeQYs00D1MqsudX"
+export const plans = [
+  {
+    id: "pro",
+    name: "Pro",
+    amount: 150,
+    clusters: 2,
+    projects: 1,
+    databases: 3
+  },
+  {
+    id: "business",
+    name: "Business",
+    clusters: 5,
+    projects: 5,
+    databases: -1
+  }
+]
 const getURL = (productionURL, developmentURL, mockURL) => {
   if (process.env.NODE_ENV === "production") {
     return productionURL

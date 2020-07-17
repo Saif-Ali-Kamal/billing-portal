@@ -33,7 +33,7 @@ export function addBillingAccount(stripeClient, cardElement, billingAccountName,
         })
           .then(result => {
             if (result.error) {
-              resolve({ cardConfirmed: false, error: result.error })
+              resolve({ billingId, cardConfirmed: false, error: result.error })
               return
             }
 
@@ -42,7 +42,7 @@ export function addBillingAccount(stripeClient, cardElement, billingAccountName,
             // Its just so that we know what all billing accounts are there with the user.
             addBillingAccountToProfile(billingId, billingAccountName)
 
-            resolve({ cardConfirmed: true })
+            resolve({ billingId, cardConfirmed: true })
 
             // Load billing accounts in background so that we can have the info of this newly added credit card in the UI
             // This method fetches the entire info of all the billing accounts along with the credit cards associated with each billing account
@@ -121,7 +121,7 @@ export const getBillingAccountInfo = (state, billingId) => {
   return index === -1 ? {} : billingAccounts[index]
 }
 export const getBillingAccountCountry = (state, billingId) => getBillingAccountInfo(state, billingId).country
-const getCards = (state, billingId) => {
+export const getCards = (state, billingId) => {
   const billingAccount = getBillingAccountInfo(state, billingId)
   return get(billingAccount, "cards", [])
 }

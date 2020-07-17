@@ -7,8 +7,8 @@ import Sidenav from '../../components/sidenav/Sidenav';
 import ProjectPageLayout, { Content } from '../../components/project-page-layout/ProjectPageLayout';
 import TableExpandIcon from "../../components/table-expand-icon/TableExpandIcon"
 import { useSelector } from 'react-redux';
-import { getBillingAccounts } from '../../operations/billingAccount';
-import { capitalizeFirstCharacter } from '../../utils';
+import { getBillingAccounts, removeCard } from '../../operations/billingAccount';
+import { capitalizeFirstCharacter, incrementPendingRequests, notify, decrementPendingRequests } from '../../utils';
 
 const BillingAccounts = () => {
   useEffect(() => {
@@ -20,6 +20,19 @@ const BillingAccounts = () => {
 
   // Global state
   const billingAccounts = useSelector(state => getBillingAccounts(state))
+
+  // Handlers
+  const handleClickAddCard = () => history.push(`/billing/${billingId}/billing-accounts/add-card`)
+
+  const handleClickAddBillingAccount = () => history.push(`/billing/${billingId}/billing-accounts/add-account`)
+
+  const handleClickDeleteCard = (cardId) => {
+    incrementPendingRequests()
+    removeCard(billingId, cardId)
+      .then(() => notify("success", "Success", "Deleted card successfully"))
+      .catch((ex) => notify("error", "Error deleting card", ex))
+      .finally(() => decrementPendingRequests())
+  }
 
   const billingAccountColumn = [
     {
@@ -34,11 +47,9 @@ const BillingAccounts = () => {
     },
     {
       title: 'Balance Credit',
-      key: 'balance',
-      dataIndex: 'balance'
+      render: (_, { balance }) => `$${balance / 100}`
     }
   ]
-
 
   const expandedRowRender = ({ cards = [] }) => {
     const cardsColumn = [
@@ -62,17 +73,15 @@ const BillingAccounts = () => {
       {
         title: 'Action',
         key: 'action',
-        render: (_, { id }) => (<Popconfirm title={`This will delete the card. Are you sure?`} onConfirm={() => console.log('deactivate')}>
+        render: (_, { id }) => (<Popconfirm title={`This will delete the card. Are you sure?`} onConfirm={() => handleClickDeleteCard(id)}>
           <a style={{ color: "red" }}>Delete</a>
         </Popconfirm>)
       }
     ]
 
-    const handleAddCardClick = () => history.push(`/billing/${billingId}/billing-accounts/add-card`)
-
     return (
       <div>
-        <h3 style={{ display: "flex", justifyContent: "space-between" }}>Cards <Button type="primary" ghost onClick={handleAddCardClick}>Add a card</Button></h3>
+        <h3 style={{ display: "flex", justifyContent: "space-between" }}>Cards <Button type="primary" ghost onClick={handleClickAddCard}>Add a card</Button></h3>
         <Table columns={cardsColumn} dataSource={cards} pagination={false} bordered style={{ marginTop: 16 }} rowKey="id" />
       </div>
     );
@@ -84,7 +93,7 @@ const BillingAccounts = () => {
       <Sidenav selectedItem="billing-accounts" />
       <ProjectPageLayout>
         <Content>
-          <h3 style={{ display: "flex", justifyContent: "space-between" }}>Billing accounts<Button onClick={() => history.push('/billing-accounts/add-account')} type="primary">Add billing account</Button></h3>
+          <h3 style={{ display: "flex", justifyContent: "space-between" }}>Billing accounts<Button onClick={handleClickAddBillingAccount} type="primary">Add billing account</Button></h3>
           <Table
             rowKey="id"
             columns={billingAccountColumn}
