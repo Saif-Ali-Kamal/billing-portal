@@ -10,6 +10,11 @@ export const notify = (type, title, msg, duration) => {
   notification[type]({ message: title, description: msg.toString(), duration: duration });
 }
 
+export function capitalizeFirstCharacter(str) {
+  if (!str) return str
+  return str.charAt(0).toUpperCase() + str.slice(1)
+}
+
 export function getToken() {
   return localStorage.getItem("token")
 }
@@ -60,9 +65,10 @@ export function performOnTokenActions() {
 }
 
 export function performOnAppLoadActions() {
-  const token = getToken()
-  if (!token) {
-    history.push("signup")
+  const loggedIn = isLoggedIn()
+  const pathname = window.location.pathname
+  if (!loggedIn && pathname.startsWith("/billing")) {
+    history.push("/signup")
     return
   }
 
@@ -74,7 +80,7 @@ export const PrivateRoute = ({ component: Component, ...rest }) => {
     <Route
       {...rest}
       render={props =>
-        isLoggedIn() ? (
+        !isLoggedIn() ? (
           <Redirect to='/signup' />
         ) : (
             <Component {...props} />
@@ -89,7 +95,7 @@ export const BillingRoute = ({ component: Component, ...rest }) => {
     <Route
       {...rest}
       render={props =>
-        isBillingEnabled() ? (
+        !isBillingEnabled() ? (
           <Redirect to='/enable-billing' />
         ) : (
             <Component {...props} />

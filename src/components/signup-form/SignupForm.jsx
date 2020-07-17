@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Input, Card, Checkbox, Button } from 'antd';
-import { useHistory } from 'react-router';
 
 const SignupForm = (props) => {
-  const history = useHistory();
   const [form] = Form.useForm()
   const [checked, setChecked] = useState(false)
   const [privacyPolicy, setPrivacyPolicy] = useState(false)
@@ -41,7 +39,7 @@ const SignupForm = (props) => {
           </Form.Item>
         </Form>
       </Card>
-      <center><p style={{ color: 'rgba(255, 255, 255, 0.6)' }}>Already have an account? <a style={{ color: '#ffffff' }} onClick={() => history.push('/login')}>Login</a></p></center>
+      <center><p style={{ color: 'rgba(255, 255, 255, 0.6)' }}>Already have an account? <a style={{ color: '#ffffff' }} href="/login">Login</a></p></center>
     </React.Fragment>
   );
 }

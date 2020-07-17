@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import ReactGA from 'react-ga';
 import { Row, Col, Button, Table, Popconfirm } from 'antd';
-import { CaretDownFilled, CaretRightFilled } from '@ant-design/icons';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import Sidenav from '../../components/sidenav/Sidenav';
 import Topbar from '../../components/topbar/Topbar';
 import ProjectPageLayout, { Content } from '../../components/project-page-layout/ProjectPageLayout';
 import emptyCartSvg from '../../assets/empty-cart.svg';
 import LicenseKeyModal from '../../components/licenses/purchase-license/license-key-modal/LicenseKeyModal';
+import { capitalizeFirstCharacter } from "../../utils"
+import { useSelector } from 'react-redux';
+import { getLicenses } from "../../operations/licenses"
+import TableExpandIcon from "../../components/table-expand-icon/TableExpandIcon"
 
 const Licenses = () => {
   useEffect(() => {
@@ -15,132 +18,120 @@ const Licenses = () => {
   }, [])
 
   const history = useHistory();
+  const { billingId } = useParams();
   const [applyKeyModalVisible, setApplyKeyModalVisible] = useState(false)
   const [applyKeyId, setApplyKeyId] = useState('');
 
-  const emptyState = 
-    <Row >
-      <Col lg={{ span: 10, offset: 6 }} style={{ textAlign:"center", marginTop:"72px" }}>
-        <img src={emptyCartSvg}/>   
-        <p style={{ margin:"16px 0 24px 0" }}>No Space Cloud licenses purchased yet through this billing account</p>
-        <Button style={{ width:"55%", borderRadius:"100px", height:'40px' }} type="primary" onClick={() => history.push('/licenses/purchase')}>Purchase a license</Button>   
-      </Col>
-    </Row>
+  // Global state
+  const licenses = useSelector(state => getLicenses(state))
+
+  // Derived state
+  const noOfLiicenses = licenses.length
 
   const handleApplykey = (name) => {
     setApplyKeyModalVisible(true);
     setApplyKeyId(name)
   }
 
-  const expandedRowRender = () => {
-   const licenseKeyColumn=[{
+  const handlePurchaseClick = () => {
+    history.push(`/billing/${billingId}/licenses/purchase`)
+  }
+
+  const expandedRowRender = ({ license_key_mapping = [] }) => {
+    const licenseKeyColumn = [
+      {
+        title: 'Key',
+        dataIndex: 'key',
+        key: 'key',
+      },
+      {
+        title: 'Applied to cluster',
+        dataIndex: ["meta", "clusterName"],
+        key: 'clusterName',
+      },
+      {
+        title: 'Action',
+        key: 'action',
+        render: (_, { key }) => (
+          <a onClick={() => handleApplykey(key)}>Apply license key</a>
+        )
+      }
+    ]
+
+    return (
+      <div>
+        <h3>License keys</h3>
+        <Table columns={licenseKeyColumn} dataSource={license_key_mapping} pagination={false} bordered style={{ marginTop: 16 }} />
+      </div>
+    );
+  }
+
+  const licenseColumn = [
+    {
       title: 'ID',
       dataIndex: 'id',
       key: 'id',
-    },{
-      title: 'Applied to cluster',
-      dataIndex: 'appliedToCluster',
-      key: 'appliedToCluster',
-    },{
+    },
+    {
+      title: 'Type',
+      dataIndex: 'type',
+      key: 'type',
+    },
+    {
+      title: 'Purchase date',
+      render: (_, record) => capitalizeFirstCharacter(record.purchase_date.toISOString())
+    },
+    {
+      title: 'Status',
+      render: (_, record) => capitalizeFirstCharacter(record.status)
+    },
+    {
+      title: 'Subscription cycle',
+      render: (_, record) => capitalizeFirstCharacter(record.periodicity)
+    },
+    {
       title: 'Action',
       key: 'action',
-      render: (_, {name}) => (
-        <a onClick={() => handleApplykey(name)}>Apply license key</a>
-      )
-    }]
-
-    const licenseKeyData = []
-    for(let i=0; i<3; i++){
-      licenseKeyData.push({
-        key: i,
-        id: 'lic_vghjkgf45678gbn',
-        appliedToCluster: 'cluster 1'
-      })
+      render: (_, record, { id }) => {
+        if (record.status === 'active') {
+          return (<Popconfirm title={`This will deactivate subscription. Are you sure?`} onConfirm={() => console.log('deactivate')}>
+            <a style={{ color: "red" }}>Deactivate</a>
+          </Popconfirm>)
+        } else {
+          return (<Popconfirm title={`This will renew subscription. Are you sure?`} onConfirm={() => console.log('renew')}>
+            <a style={{ color: "#40A9FF" }}>Renew</a>
+          </Popconfirm>)
+        }
+      }
     }
+  ]
 
-    return (<Row>
-      <Col lg={{ span: 23, offset: 0 }} style={{ margin: "" }}>
-        <h3>License keys</h3>
-        <Table columns={licenseKeyColumn} dataSource={licenseKeyData}  pagination={false} bordered/>
+  const emptyState =
+    <Row >
+      <Col lg={{ span: 10, offset: 6 }} style={{ textAlign: "center", marginTop: "72px" }}>
+        <img src={emptyCartSvg} />
+        <p style={{ margin: "16px 0 24px 0" }}>No Space Cloud licenses purchased yet through this billing account</p>
+        <Button style={{ width: "55%", borderRadius: "100px", height: '40px' }} type="primary" onClick={handlePurchaseClick}>Purchase a license</Button>
       </Col>
     </Row>
-    );
-  }
-  
-  const licenseColumn = [{
-    title: 'ID',
-    dataIndex: 'id',
-    key: 'id',
-  },{
-    title: 'Type',
-    dataIndex: 'type',
-    key: 'type',
-  },{
-    title: 'Purchase date',
-    dataIndex: 'purchaseDate',
-    key: 'purchaseDate'
-  },{
-    title: 'Status',
-    dataIndex: 'status',
-    key: 'status',
-    render: (_, record) => {
-      if(record.status === 'active'){
-        return <span style={{ color:'#52C41A' }}>Active</span>
-      } else if (record.status === 'expiry') {
-        return <span style={{ color:'#FF4D4F' }}>Expiry</span>
-      } else {
-        return <span>Deactivated</span>
-      }
-    }
-  },{
-    title: 'Action',
-    key: 'action',
-    render: (_, record, { name }) => {
-      if(record.status === 'active'){
-        return (<Popconfirm title={`This will deactivate subscription ${name}. Are you sure?`} onConfirm={() => console.log('deactivate')}>
-          <a style={{ color: "red" }}>Deactivated</a>
-        </Popconfirm>)
-      } else {
-        return (<Popconfirm title={`This will renew subscription ${name}. Are you sure?`} onConfirm={() => console.log('renew')}>
-          <a style={{ color:'blue' }}>Renew</a>
-        </Popconfirm>)
-      }
-    }
-  }]
 
-  const licenseData = [];
-  for(let i=0; i<3; i++){
-    licenseData.push({
-      key: i,
-      id: '1b6b8a79-d4c6-45c8-a4a9-84ff6ec6036d',
-      type: 'PRO',
-      purchaseDate: 'March 4, 2020',
-      status: 'deactivated'
-    })
-  }
-
-
-  return(
+  return (
     <React.Fragment>
       <Topbar showBillingSelector />
       <Sidenav selectedItem='licenses' />
       <ProjectPageLayout>
         <Content>
-          {emptyState}
-          <h3 style={{ display: "flex", justifyContent: "space-between" }}>Licenses <Button onClick={() => history.push('/licenses/purchase')} type="primary">Purchase a license</Button></h3>
-          <Table 
-            columns={licenseColumn} 
-            expandable={{ expandedRowRender,
-              expandIcon: ({ expanded, onExpand, record }) =>
-              expanded ? (
-                <CaretDownFilled onClick={e => onExpand(record, e)} />
-              ) : (
-                <CaretRightFilled onClick={e => onExpand(record, e)} />
-              )
-              }}
-            dataSource={licenseData} 
-            bordered/>
-        {applyKeyModalVisible && <LicenseKeyModal handleCancel={() => setApplyKeyModalVisible(false)} />}
+          {noOfLiicenses === 0 && emptyState}
+          {noOfLiicenses > 0 && <React.Fragment>
+            <h3 style={{ display: "flex", justifyContent: "space-between" }}>Licenses <Button onClick={handlePurchaseClick} type="primary">Purchase a license</Button></h3>
+            <Table
+              style={{ marginTop: 16 }}
+              columns={licenseColumn}
+              expandable={{ expandedRowRender, expandIcon: TableExpandIcon }}
+              dataSource={licenses}
+              bordered />
+          </React.Fragment>}
+          {applyKeyModalVisible && <LicenseKeyModal handleCancel={() => setApplyKeyModalVisible(false)} />}
         </Content>
       </ProjectPageLayout>
     </React.Fragment>

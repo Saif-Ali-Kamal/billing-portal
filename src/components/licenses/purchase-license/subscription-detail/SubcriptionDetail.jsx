@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch } from "react-redux";
-import { Row, Col, Card, Button } from 'antd';
+import React from 'react';
+import { Row, Col, Card, Button, Form, Checkbox, Select } from 'antd';
 import ApplyCouponForm from "../promo-code/ApplyCouponForm";
-import { increment, decrement } from 'automate-redux';
+import ConditionalFormBlock from "../../../conditional-form-block/ConditionalFormBlock";
+const { Option } = Select;
 
-const SubscriptionDetail = ({ plan, countryCode, handleSuccess }) => {
-  const dispatch = useDispatch()
-  
+const SubscriptionDetail = ({ handleSuccess, creditCards = [] }) => {
+  const [form] = Form.useForm()
+  const handleSubmitClick = (values) => {
+    handleSuccess(values.creditCard)
+  }
+
   return (
     <Row>
       <Col xl={{ span: 12, offset: 6 }} lg={{ span: 20, offset: 2 }}>
@@ -17,7 +20,26 @@ const SubscriptionDetail = ({ plan, countryCode, handleSuccess }) => {
             <p><b>Total Databases</b>: 3 per project</p>
           </Card>
           <ApplyCouponForm />
-          <Button type="primary" style={{ width: '100%', marginTop: '24px' }} onClick={handleSuccess}>Start subscription</Button>
+          <Form form={form} onFinish={handleSubmitClick} initialValues={{ useDefaultCard: true }}>
+            <p><b>Payment method</b></p>
+            <Form.Item name="useDefaultCard" valuePropName="checked">
+              <Checkbox>
+                Use the default credit card of the billing account
+              </Checkbox>
+            </Form.Item>
+            <ConditionalFormBlock dependency="useDefaultCard" condition={() => !form.getFieldValue("useDefaultCard")}>
+              <Form.Item name="creditCard">
+                <Select placeholder="Select a card">
+                  {
+                    creditCards.map(({ id, brand, last4, expiry }) => <Option id={id} >{`${brand} card (xxxx xxxx xxxx ${last4}) expiring on ${expiry}`}</Option>)
+                  }
+                </Select>
+              </Form.Item>
+            </ConditionalFormBlock>
+            <Form.Item>
+              <Button type="primary" block style={{ marginTop: 16 }} size="large" >Start subscription</Button>
+            </Form.Item>
+          </Form>
         </Card>
       </Col>
     </Row>

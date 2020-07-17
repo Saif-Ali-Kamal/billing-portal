@@ -1,9 +1,7 @@
 import React from 'react';
 import { Card, Form, Input, Button } from 'antd';
-import { useHistory } from 'react-router-dom';
 
 const ForgetPasswordForm = (props) => {
-  const history = useHistory();
 
   const handleSubmitClick = (values) => {
     props.handleSubmit(values.email);
@@ -26,7 +24,7 @@ const ForgetPasswordForm = (props) => {
           </Form.Item>
         </Form>
       </Card>
-      <center><p style={{ color: 'rgba(255, 255, 255, 0.6)' }}>Back to <a style={{ color: '#ffffff' }} onClick={() => history.push('/login')}>Signin</a></p></center>
+      <center><p style={{ color: 'rgba(255, 255, 255, 0.6)' }}>Back to <a style={{ color: '#ffffff' }} href="/login" >Login</a></p></center>
     </React.Fragment>
   );
 }

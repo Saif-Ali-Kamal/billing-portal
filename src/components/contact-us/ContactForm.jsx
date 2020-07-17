@@ -16,7 +16,9 @@ const ContactForm = ({ email, subject, handleSendMessage }) => {
             <Form.Item name="message" rules={[{ required: true, message: 'Please provide a message' }]}>
               <Input.TextArea rows={4} placeholder="" />
             </Form.Item>
-            <Button type="primary" htmlType="submit" style={{ width: '100%', marginTop: '24px' }} >Send message</Button>
+            <Form.Item noStyle>
+              <Button type='primary' block size="large" htmlType="submit" style={{ marginTop: 16 }}>Send message</Button>
+            </Form.Item>
           </Form>
         </Card>
       </Col>

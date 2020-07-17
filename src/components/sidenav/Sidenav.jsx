@@ -30,6 +30,9 @@ const Sidenav = (props) => {
           <Link to={`/billing/${billingId}/billing-accounts`} onClick={closeSidenav}>
             <SidenavItem name="Billing accounts" icon="people" active={props.selectedItem === 'billing-accounts'} />
           </Link>
+          <Link to={`/billing/${billingId}/profile`} onClick={closeSidenav}>
+            <SidenavItem name="Profile" icon="person" active={props.selectedItem === 'profile'} />
+          </Link>
           <Link to={`/billing/${billingId}/contact-us`} onClick={closeSidenav}>
             <SidenavItem name="Contact us" icon="email" active={props.selectedItem === 'contact-us'} />
           </Link>

@@ -2,25 +2,29 @@ import React from 'react';
 import { Modal, Form, Input } from 'antd';
 
 const ChangePassword = (props) => {
-  return(
+  const [form] = Form.useForm()
+  const handleOk = () => {
+    form.validateFields()
+      .then((values) => {
+        props.handleSubmit(values.currentPassword, values.newPassword)
+          .then(() => props.handleCancel())
+      })
+  }
+  return (
     <Modal
       title='Change password'
       visible={true}
       okText='Save'
-      onOk={props.handleChangePassword}
+      onOk={handleOk}
       onCancel={props.handleCancel}>
-      <Form>
+      <Form form={form}>
         <p><b>Current password</b></p>
-        <Form.Item name='currentPassword' rules={[{ required:true, message:'Please input your current password!'}]}>
+        <Form.Item name='currentPassword' rules={[{ required: true, message: 'Please input your current password!' }]}>
           <Input.Password placeholder='Current password' />
         </Form.Item>
         <p><b>New password</b></p>
-        <Form.Item name='newPassword' rules={[{ required:true, message:'Please input new password!'}]}>
+        <Form.Item name='newPassword' rules={[{ required: true, message: 'Please input new password!' }]}>
           <Input.Password placeholder='New password' />
-        </Form.Item>
-        <p><b>Confirm password</b></p>
-        <Form.Item name='confirmPassword' rules={[{ required:true, message:'Please input confirm password!'}]}>
-          <Input.Password placeholder='Confirm password' />
         </Form.Item>
       </Form>
     </Modal>

@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
-import { useStripe, useElements, CardElement, Elements } from '@stripe/react-stripe-js';
+import React from 'react';
+import { useStripe, useElements, Elements } from '@stripe/react-stripe-js';
 import CardSection from './card-section/CardSection';
 import { Form, Button, Input, Select, Card } from 'antd';
 import countries from "./countries.json"
-import { increment, decrement } from 'automate-redux';
 import { loadStripe } from '@stripe/stripe-js';
 
 const stripePromise = loadStripe("pk_test_86Z4cMrqx8qC7bHLa0nLeQYs00D1MqsudX");
@@ -12,22 +11,17 @@ const countriesOptions = countries.map(obj => <Select.Option key={obj.code} valu
 const BillingDetailsForm = (props) => {
   const stripe = useStripe();
   const elements = useElements();
-  const [invoiceId, setInvoiceId] = useState(undefined)
 
   return (
     <div>
-      <Form>
+      <Form initialValues={{ name: "My Billing Account 1" }}>
         <p><b>Billing account name</b></p>
         <Form.Item name="name">
           <Input placeholder="Please input a billing account name!" />
         </Form.Item>
         <p><b>Add your card</b></p>
-        <Form.Item>
-          <Form.Item name="cardDetails">
-            <CardSection />
-          </Form.Item>
-        </Form.Item>
-        <p style={{ marginTop: '-24px' }}><b>Billing address</b></p>
+        <CardSection />
+        <p style={{ marginTop: 24 }}><b>Billing address</b></p>
         <Form.Item name="country" rules={[{ required: true, message: 'Please select your country' }]}>
           <Select placeholder="Select your country"
             showSearch
@@ -36,10 +30,12 @@ const BillingDetailsForm = (props) => {
             {countriesOptions}
           </Select>
         </Form.Item>
-        <Form.Item name="line1" style={{ marginTop: '-8px' }}>
+        <Form.Item name="line1" rules={[{ required: true, message: 'Please input your street' }]} >
           <Input placeholder="Street" />
         </Form.Item>
-        <Button type="primary" htmlType="submit" style={{ width: '100%', marginTop: '24px' }}>Save your billing details</Button>
+        <Form.Item noStyle>
+          <Button type='primary' block size="large" htmlType="submit" style={{ marginTop: 16 }}>Save your billing details</Button>
+        </Form.Item>
       </Form>
     </div>
   );

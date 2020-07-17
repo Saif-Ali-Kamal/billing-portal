@@ -178,37 +178,6 @@ body {
   z-index: 10001;
 }
 
-.remote-img {
-  width: 40% !important;
-}
-
-@media screen and (max-width: 450px) {
-  .remote-img {
-    width: 80% !important;
-  }
-  .radio-card {
-    margin: 8px 16px 8px 0;
-  }
-}
-@media screen and (min-width: 768px) {
-  .file-storage .ant-row-flex {
-    flex-flow: inherit;
-  }
-  .file-storage .ant-row-flex .panel {
-    margin: 0;
-  }
-  .file-storage .ant-row-flex .panel .panel__graphic .file-storage-svg {
-    width: 100% !important;
-  }
-  .file-storage .ant-row-flex .panel .panel__graphic{
-    width: inherit !important;
-  }
-}
-@media screen and (max-width: 768px) {
-  .file-storage .ant-row-flex {
-    flex-flow: row wrap;
-  }
-  .file-storage .ant-row-flex .panel .panel__graphic .file-storage-svg {
-    width: 100% !important;
-  }
+tr.ant-table-expanded-row > td {
+  background: white;
 }

@@ -2,7 +2,7 @@ import client from '../client';
 import store from '../store';
 import { set, get } from 'automate-redux';
 
-export function loadLicenses(billingId) {
+export function loadLicenses(billingId, startingAfter) {
   return new Promise((resolve, reject) => {
     client.licenses(billingId, startingAfter)
       .then((invoices) => {
@@ -13,7 +13,7 @@ export function loadLicenses(billingId) {
   });
 }
 
-export default function createSubscription(billingId, planId, cardId) {
+export function createSubscription(billingId, planId, cardId) {
   return new Promise((resolve, reject) => {
     client.licenses.createSubscription(billingId, [planId], cardId)
       .then((licenses) => {
@@ -27,7 +27,7 @@ export default function createSubscription(billingId, planId, cardId) {
   });
 }
 
-export default function deactivateLicense(billingId, licenseId) {
+export function deactivateLicense(billingId, licenseId) {
   return new Promise((resolve, reject) => {
     client.licenses.deactivateLicense(billingId, [licenseId])
       .then(() => {
@@ -40,7 +40,7 @@ export default function deactivateLicense(billingId, licenseId) {
   });
 }
 
-export default function renewLicense(billingId, [licenseId]) {
+export function renewLicense(billingId, [licenseId]) {
   return new Promise((resolve, reject) => {
     client.licenses.renewLicense(billingId, licenseId)
       .then(() => {
