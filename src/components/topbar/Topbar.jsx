@@ -9,7 +9,7 @@ import upLogo from '../../logo.png';
 import avatarSvg from '../../assets/avatar.svg';
 import { useParams } from 'react-router';
 import { useSelector } from 'react-redux';
-import { getProfileBillingAccounts } from '../../operations/userManagement';
+import { getProfileBillingAccounts, getProfile } from '../../operations/userManagement';
 import { openBillingAccount } from '../../utils';
 
 const Topbar = (props) => {
@@ -17,6 +17,7 @@ const Topbar = (props) => {
 
   // Global state
   const billingAccounts = useSelector(state => getProfileBillingAccounts(state))
+  const { name, email } = useSelector(state => getProfile(state))
 
   // Component state
   const [popoverVisible, setPopoverVisible] = useState(false)
@@ -36,8 +37,8 @@ const Topbar = (props) => {
         <img src={avatarSvg} />
       </Col>
       <Col lg={{ span: 17, offset: 2 }}>
-        <h4>Jayesh Choudhary</h4>
-        <p>jayesh@spaceuptech.com</p>
+        <h4>{name}</h4>
+        <p>{email}</p>
         <Button type="primary" style={{ borderRadius: '4px' }} onClick={handleLogout}>Logout</Button>
       </Col>
     </Row>

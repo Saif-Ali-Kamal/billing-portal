@@ -10,7 +10,7 @@ import UserManagement from './userManagement';
 
 
 class Service {
-  constructor(token) {
+  constructor() {
     this.billingClient = createGraphQLClient(billingServerGraphQLURL, getToken)
     this.spaceSiteClient = createRESTClient(spaceSiteServerURL, { credentials: "omit" })
     this.userManagement = new UserManagement(this.billingClient)
@@ -18,7 +18,6 @@ class Service {
     this.invoices = new Invoices(this.billingClient)
     this.licenses = new Licenses(this.billingClient)
     this.promoCodes = new PromoCodes(this.billingClient)
-    if (token) this.billingClient.setToken(token);
   }
 
   contactUs(email, name, subject, msg) {
