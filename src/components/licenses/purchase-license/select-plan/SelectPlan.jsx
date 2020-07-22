@@ -27,7 +27,7 @@ export default function SelectPlan({ handleSelectPlan, handleContactUs }) {
               <Typography.Paragraph style={{ marginBottom: 0 }} ellipsis>3 databases</Typography.Paragraph>
               <Typography.Paragraph style={{ marginBottom: 0 }} ellipsis>Email support (48 hrs response time)</Typography.Paragraph>
             </div>
-            <Button size="large" className="select-plan-button blue-button" onClick={() => handleSelectPlan("pro")}>Purchase</Button>
+            <Button size="large" className="select-plan-button blue-button" onClick={() => handleSelectPlan("space-cloud-pro--monthly")}>Purchase</Button>
           </FlexContainer>
         </Card>
       </Col>

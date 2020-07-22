@@ -7,7 +7,7 @@ import Sidenav from '../../components/sidenav/Sidenav';
 import ProjectPageLayout, { Content } from '../../components/project-page-layout/ProjectPageLayout';
 import TableExpandIcon from "../../components/table-expand-icon/TableExpandIcon"
 import { useSelector } from 'react-redux';
-import { getBillingAccounts, removeCard } from '../../operations/billingAccount';
+import { getBillingAccounts, removeCard,setDefaultCard } from '../../operations/billingAccount';
 import { capitalizeFirstCharacter, incrementPendingRequests, notify, decrementPendingRequests } from '../../utils';
 
 const BillingAccounts = () => {
@@ -31,6 +31,14 @@ const BillingAccounts = () => {
     removeCard(billingId, cardId)
       .then(() => notify("success", "Success", "Deleted card successfully"))
       .catch((ex) => notify("error", "Error deleting card", ex))
+      .finally(() => decrementPendingRequests())
+  }
+
+  const handleClickSetDefaultCard = (cardId) => {
+    incrementPendingRequests()
+    setDefaultCard(billingId, cardId)
+      .then(() => notify("success", "Success", "Updated default card successfully"))
+      .catch((ex) => notify("error", "Error updating default card", ex))
       .finally(() => decrementPendingRequests())
   }
 
@@ -62,8 +70,8 @@ const BillingAccounts = () => {
         render: (_, { last4 }) => `xxxx xxxx xxxx ${last4}`
       },
       {
-        title: 'Card number',
-        render: (_, { isDefault }) => <Radio checked={isDefault} />
+        title: 'Default card',
+        render: (_, { isDefault,id }) => <Radio checked={isDefault} onChange={() => handleClickSetDefaultCard(id)} />
       },
       {
         title: 'Card expiry',

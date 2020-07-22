@@ -83,8 +83,9 @@ export function performOnAppLoadActions() {
     history.push("/signup")
     return
   }
-
-  performOnTokenActions()
+  if (loggedIn) {
+    performOnTokenActions()
+  }
 }
 
 export const PrivateRoute = ({ component: Component, ...rest }) => {

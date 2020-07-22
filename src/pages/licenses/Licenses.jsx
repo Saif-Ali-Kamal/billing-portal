@@ -113,7 +113,7 @@ const Licenses = () => {
     },
     {
       title: 'Purchase date',
-      render: (_, record) => capitalizeFirstCharacter(record.purchase_date.toISOString())
+      render: (_, record) => capitalizeFirstCharacter(record.purchase_date)
     },
     {
       title: 'Status',
@@ -126,13 +126,13 @@ const Licenses = () => {
     {
       title: 'Action',
       key: 'action',
-      render: (_, record, { id }) => {
+      render: (_, record) => {
         if (record.status === 'active') {
-          return (<Popconfirm title={`This will deactivate subscription. Are you sure?`} onConfirm={() => handleClickDeactivate(id)}>
+          return (<Popconfirm title={`This will deactivate subscription. Are you sure?`} onConfirm={() => handleClickDeactivate(record.id)}>
             <a style={{ color: "red" }}>Deactivate</a>
           </Popconfirm>)
         } else {
-          return (<Popconfirm title={`This will renew subscription. Are you sure?`} onConfirm={() => handleClickRenew(id)}>
+          return (<Popconfirm title={`This will renew subscription. Are you sure?`} onConfirm={() => handleClickRenew(record.id)}>
             <a style={{ color: "#40A9FF" }}>Renew</a>
           </Popconfirm>)
         }

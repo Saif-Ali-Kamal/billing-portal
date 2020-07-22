@@ -9,17 +9,12 @@ class Licenses {
       this.client.query({
         query: gql`
         query {
-          Fetch_Licenses (billingId: $billingId) @billing {
-            status
-            error
-            message
-            result
-          }
+          Get_Licenses (billingId: $billingId) @billing
         }`,
         variables: { billingId }
       })
         .then(res => {
-          const { status, error, message, result } = res.data.Fetch_Licenses
+          const { status, error, message, result } = res.data.Get_Licenses
           if (status !== 200) {
             reject(message)
             console.log("Error fetching licenses", error)
@@ -37,7 +32,7 @@ class Licenses {
       this.client.query({
         query: gql`
         query {
-          Create_Subcription(billingId: $billingId, plans: $plans${cardId ? ", cardId: $cardId" : ""}) @billing {
+          Create_Subscription(billingId: $billingId, plans: $plans${cardId ? ", cardId: $cardId" : ""}) @billing {
             status
             error
             message
@@ -47,7 +42,7 @@ class Licenses {
         variables: { billingId, plans, cardId }
       })
         .then(res => {
-          const { status, error, message, result } = res.data.create_Subscription
+          const { status, error, message, result } = res.data.Create_Subscription
           if (status !== 200) {
             reject(message)
             console.log("Error creating subscription", error)

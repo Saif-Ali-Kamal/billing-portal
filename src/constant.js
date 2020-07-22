@@ -1,7 +1,7 @@
 export const stripeKey = "pk_test_86Z4cMrqx8qC7bHLa0nLeQYs00D1MqsudX"
 export const plans = [
   {
-    id: "pro",
+    id: "space-cloud-pro--monthly",
     name: "Pro",
     amount: 150,
     clusters: 2,

@@ -16,7 +16,7 @@ const AddCardForm = ({ handleSubmit }) => {
       return;
     }
 
-    handleSubmit(stripe, CardElement)
+    handleSubmit(stripe, elements.getElement(CardElement))
   };
   return (
     <div>

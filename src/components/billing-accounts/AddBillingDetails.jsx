@@ -18,7 +18,7 @@ const BillingDetailsForm = ({ handleSubmit }) => {
       return;
     }
 
-    handleSubmit(stripe, CardElement, name, address)
+    handleSubmit(stripe, elements.getElement(CardElement) , name, address)
   };
   return (
     <div>

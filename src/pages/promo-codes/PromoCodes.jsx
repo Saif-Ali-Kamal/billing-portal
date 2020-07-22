@@ -21,7 +21,7 @@ const PromoCodes = () => {
 
   useEffect(() => {
     incrementPendingRequests()
-    loadPromoCodes()
+    loadPromoCodes(billingId)
       .catch(ex => notify("error", "Error fetching promo codes", ex))
       .finally(() => decrementPendingRequests())
   }, [billingId])
@@ -63,21 +63,21 @@ const PromoCodes = () => {
   const promoCodeColumn = [
     {
       title: 'Promotion Code',
-      dataIndex: 'promotionId',
+      dataIndex: 'promotion_id',
       key: 'promotionId',
     },
     {
       title: "Amount",
-      dataIndex: "amount",
+      dataIndex: "promotions",
       key: "amount",
-      render: (_, { amount }) => {
+      render: (_, { promotions }) => {
         const currencyNotation = billingCountry === "IN" ? "₹" : "$"
-        return `${currencyNotation} ${amount / 100}`
+        return `${currencyNotation} ${promotions[0].amount / 100}`
       }
     },
     {
       title: 'Applied on',
-      render: (_, { time_stamp }) => time_stamp.toISOString()
+      render: (_, { time_stamp }) => time_stamp
     }
   ]
 

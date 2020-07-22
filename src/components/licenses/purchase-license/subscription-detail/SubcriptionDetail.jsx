@@ -37,7 +37,7 @@ const SubscriptionDetail = ({ handleSuccess, creditCards = [], planDetails = {} 
           </Form.Item>
         </ConditionalFormBlock>
         <Form.Item>
-          <Button type="primary" block style={{ marginTop: 16 }} size="large" >Start subscription</Button>
+          <Button type="primary" block style={{ marginTop: 16 }} size="large" htmlType="submit" >Start subscription</Button>
         </Form.Item>
       </Form>
     </Card>

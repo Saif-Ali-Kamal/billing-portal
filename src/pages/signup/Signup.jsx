@@ -12,7 +12,7 @@ const Signup = () => {
     incrementPendingRequests()
     signup(name, organizationName, email, password)
       .then(() => {
-        notify('sucess', 'Sucess', 'Signup successful')
+        notify('success', 'Success', 'Signup successful')
         history.push("/enable-billing")
       })
       .catch(ex => notify('error', 'Error in signup', ex))

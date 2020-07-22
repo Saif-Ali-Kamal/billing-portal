@@ -17,7 +17,7 @@ const Topbar = (props) => {
 
   // Global state
   const billingAccounts = useSelector(state => getProfileBillingAccounts(state))
-  const { name, email } = useSelector(state => getProfile(state))
+  const { name, encrypted_email } = useSelector(state => getProfile(state))
 
   // Component state
   const [popoverVisible, setPopoverVisible] = useState(false)
@@ -38,7 +38,7 @@ const Topbar = (props) => {
       </Col>
       <Col lg={{ span: 17, offset: 2 }}>
         <h4>{name}</h4>
-        <p>{email}</p>
+        <p>{encrypted_email}</p>
         <Button type="primary" style={{ borderRadius: '4px' }} onClick={handleLogout}>Logout</Button>
       </Col>
     </Row>

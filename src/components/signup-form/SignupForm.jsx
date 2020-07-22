@@ -20,7 +20,7 @@ const SignupForm = (props) => {
             <Input placeholder="e.g John Doe" />
           </Form.Item>
           <p><b>Organization name</b></p>
-          <Form.Item name='org-name' rules={[{ required: true, message: 'Please input your Organization name' }]}>
+          <Form.Item name='organizationName' rules={[{ required: true, message: 'Please input your Organization name' }]}>
             <Input placeholder="Your organization name" />
           </Form.Item>
           <p><b>Email</b></p>

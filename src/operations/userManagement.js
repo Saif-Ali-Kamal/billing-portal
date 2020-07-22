@@ -34,7 +34,7 @@ export function login(email, password) {
 export function loadProfile() {
   return new Promise((resolve, reject) => {
     client.userManagement.fetchProfile()
-      .then((profile) => {
+      .then((profile) => {  
         setProfile(profile)
         resolve()
       }).catch(error => reject(error))
@@ -93,11 +93,11 @@ export function contactUs(subject, msg) {
 // Getters and setters
 export const getProfile = (state) => get(state, "profile", {})
 const setProfile = (profile) => store.dispatch(set("profile", profile))
-export const getProfileBillingAccounts = (state) => get(state, "profile.billingAccounts", [])
+export const getProfileBillingAccounts = (state) => get(state, "profile.billing_accounts", [])
 export const addBillingAccountToProfile = (id, name) => {
   const billingAccounts = getProfileBillingAccounts(store.getState())
   const newBillingAccounts = [...billingAccounts, { id, name }]
-  store.dispatch(set("profile.billingAccounts", newBillingAccounts))
+  store.dispatch(set("profile.billing_accounts", newBillingAccounts))
 }
 
 export function isLoggedIn() {
@@ -105,7 +105,7 @@ export function isLoggedIn() {
   return token ? true : false
 }
 export function isEmailVerified(state) {
-  return getProfile(state).isEmailVerified
+  return getProfile(state).is_email_verified
 }
 
 export function isBillingEnabled(state) {

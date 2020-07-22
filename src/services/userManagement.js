@@ -6,6 +6,8 @@ class UserManagement {
   }
 
   signUp(name, organizationName, email, password) {
+    console.log("Hello",organizationName,email);
+    
     return new Promise((resolve, reject) => {
       this.client.query({
         query: gql`
@@ -80,12 +82,7 @@ class UserManagement {
       this.client.query({
         query: gql`
         query {
-          Fetch_Profile @users {
-            status
-            error
-            message
-            result
-          }
+          Fetch_Profile @users
         }`,
         variables: {}
       })
@@ -95,9 +92,8 @@ class UserManagement {
             reject(message)
             console.log("Error fetching profile", error)
             return
-          }
-
-          resolve(result)
+          }          
+          resolve(result[0])
         })
         .catch(ex => reject(ex))
     })

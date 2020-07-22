@@ -9,17 +9,12 @@ class PromoCodes {
       this.client.query({
         query: gql`
         query {
-          Fetch_Promotions(billingId: $billingId) @billing {
-            status
-            error
-            message
-            result
-          }
+          Get_Promotions(billingId: $billingId) @billing
         }`,
         variables: { billingId }
       })
         .then(res => {
-          const { status, error, message, result } = res.data.Fetch_Promotions
+          const { status, error, message, result } = res.data.Get_Promotions
           if (status !== 200) {
             reject(message)
             console.log("Error fetching applied promotion codes", error)

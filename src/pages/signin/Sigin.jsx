@@ -10,7 +10,7 @@ const Signin = () => {
     incrementPendingRequests()
     login(email, password)
       .then(() => {
-        notify('sucess', 'Sucess', 'Login successful');
+        notify('success', 'Success', 'Login successful');
         performOnTokenActions()
       })
       .catch(ex => notify('error', 'Error in login', ex))

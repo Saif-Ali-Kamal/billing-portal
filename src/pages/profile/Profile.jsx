@@ -16,7 +16,7 @@ const Profile = () => {
   }, [])
 
   // Global state
-  const { name, email, createdOn } = useSelector(state => getProfile(state))
+  const { name, email, creation_date } = useSelector(state => getProfile(state))
 
   // Component state
   const [modalVisible, setModalVisible] = useState(false)
@@ -54,7 +54,7 @@ const Profile = () => {
                       <p style={{ color: "rgba(0,0,0,0.45)", marginBottom: 4 }}>{email}</p>
                       <div style={{ color: "rgba(0,0,0,0.45)", marginBottom: 4, display: "flex", alignItems: "center" }}>
                         <i className="material-icons-outlined" style={{ fontSize: 16 }}>calendar_today</i>
-                        <span style={{ marginLeft: 8 }}>{createdOn.toISOString()}</span>
+                        <span style={{ marginLeft: 8 }}>{creation_date}</span>
                       </div>
                     </div>
                   </div>
