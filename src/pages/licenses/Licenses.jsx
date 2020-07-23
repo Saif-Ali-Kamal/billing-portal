@@ -101,8 +101,9 @@ const Licenses = () => {
       },
       {
         title: 'Applied to cluster',
-        dataIndex: ["meta", "clusterName"],
-        key: 'clusterName',
+        render: (_, { meta = {} }) => (
+          meta.clusterName ? meta.clusterName : "None"
+        )
       },
       {
         title: 'Action',
@@ -160,7 +161,7 @@ const Licenses = () => {
       key: 'action',
       render: (_, record) => {
         const actionButtons = [
-          <a style={{ color: "#40A9FF" }} onClick={() => handleClickQuotas(licenseId)}>Show quotas</a>
+          <a style={{ marginRight: 16, color: "#40A9FF" }} onClick={() => handleClickQuotas(record.id)}>Show quotas</a>
         ]
         switch (record.status) {
           case "active":

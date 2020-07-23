@@ -36,23 +36,7 @@ class BillingAccount {
       this.client.query({
         query: gql`
         query {
-          Get_Billing_Accounts @billing {
-            status
-            error
-            message
-            result {
-              id
-              name
-              balance
-              cards {
-                id
-                brand
-                last4
-                expiry
-                isDefault
-              }
-            }
-          }
+          Get_Billing_Accounts @billing 
         }`,
         variables: {}
       })
