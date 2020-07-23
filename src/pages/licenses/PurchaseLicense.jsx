@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ReactGA from 'react-ga';
+import { useStripe } from '@stripe/react-stripe-js'
 import { Row, Col, Steps } from 'antd';
 import { useHistory, useParams } from 'react-router';
 import Sidenav from '../../components/sidenav/Sidenav';
@@ -30,6 +31,7 @@ const PurchaseLicense = () => {
 
   const history = useHistory();
   const { billingId } = useParams();
+  const stripe = useStripe();
 
   // Component state
   const [current, setCurrent] = useState(0);
@@ -53,7 +55,7 @@ const PurchaseLicense = () => {
 
   const handlePurchaseLicense = (cardId) => {
     incrementPendingRequests()
-    createSubscription(billingId, selectedPlanId, cardId)
+    createSubscription(stripe, billingId, selectedPlanId, cardId)
       .then((licenseId) => {
         notify("success", "Success", "Purchased license successfully")
         setPurchasedLicenseId(licenseId)
