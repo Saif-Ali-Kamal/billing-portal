@@ -10,15 +10,7 @@ class Plans {
       this.client.query({
         query: gql`
         query {
-          Get_Plans @billing {
-            id
-            name
-            amount
-            currency
-            products {
-              quotas
-            }
-          }
+          Get_Plans @billing
         }`,
         variables: {}
       })

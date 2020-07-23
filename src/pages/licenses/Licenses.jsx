@@ -109,7 +109,7 @@ const Licenses = () => {
         key: 'action',
         render: (_, { key, meta }) => (
           <React.Fragment>
-            <a onClick={() => handleApplykey(id, key)}>Apply license key</a>
+            <a style={{ marginRight: 16 }} onClick={() => handleApplykey(id, key)}>Apply license key</a>
             {meta && meta.clusterName && (
               <Popconfirm title={`This will downgrade the associated cluster to Opensource plan. Are you sure?`} onConfirm={() => handleClickRevokeLicenseKey(id, key)}>
                 <a style={{ color: "red" }}>Revoke</a>
