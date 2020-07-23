@@ -50,14 +50,19 @@ class Licenses {
           }
 
           const { subscription, licenses } = result
-
-          if (!subscription || subscription.status !== "active") {
-            reject(message)
-            console.log("Error creating subscription", error)
+          if (!subscription) subscription = {}
+          const { latest_invoice = {}, status: subscriptionStatus } = subscription
+          const { payment_intent = {} } = latest_invoice
+          const ack = subscriptionStatus === "active"
+          const requiresAction = subscriptionStatus === "incomplete" && payment_intent.status === "requires_action"
+          const paymentIntentSecret = payment_intent.client_secret
+          if (ack || requiresAction) {
+            resolve({ ack, licenses, paymentIntentSecret })
             return
           }
 
-          resolve(licenses)
+          console.log("Error creating subscription", error)
+          reject(message)
         })
         .catch(ex => reject(ex))
     })
@@ -108,6 +113,33 @@ class Licenses {
           if (status !== 200) {
             reject(message)
             console.log("Error renewing licenses", error)
+            return
+          }
+
+          resolve()
+        })
+        .catch(ex => reject(ex))
+    })
+  }
+
+  removeLicenseKey(billingId, licenseId, licenseKey) {
+    return new Promise((resolve, reject) => {
+      this.client.query({
+        query: gql`
+        query {
+          Remove_License_key(billingId: $billingId, licenseId: $licenseId, licenseKey: $licenseKey) @billing {
+            status
+            error
+            message
+          }
+        }`,
+        variables: { billingId, licenseId, licenseKey }
+      })
+        .then(res => {
+          const { status, error, message } = res.data.Remove_License_key
+          if (status !== 200) {
+            reject(message)
+            console.log("Error removing license key", error)
             return
           }
 

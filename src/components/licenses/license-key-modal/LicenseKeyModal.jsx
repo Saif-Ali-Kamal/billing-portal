@@ -11,7 +11,7 @@ const LicenseKeyModal = ({ handleCancel, licenseKey, licenseSecret }) => {
       footer={null} >
       <ol style={{ padding: 16 }}>
         <li>Open Mission Control (Admin UI) of the Space Cloud cluster.</li>
-        <li>Navigate to Settings &gt; Cluster Settings</li>
+        <li>Navigate to Settings &gt; License</li>
         <li>Click on the Apply license key button.</li>
         <li>Provide the Space Cloud cluster a name</li>
         <li>Copy paste the below Key and Secret.</li>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Table, Card, Alert, Row, Col } from 'antd';
-import LicenseKeyModal from '../license-key-modal/LicenseKeyModal';
+import LicenseKeyModal from '../../license-key-modal/LicenseKeyModal';
 import { useHistory, useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';

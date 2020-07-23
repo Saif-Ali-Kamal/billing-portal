@@ -10,8 +10,8 @@ export function signup(name, organizationName, email, password) {
         // Save the token for future use 
         saveToken(token)
 
-        // Set thr profile, so that it can be visible in the topbar
-        const profile = { name, email }
+        // Set the profile, so that it can be visible in the topbar
+        const profile = { name, encrypted_email: email }
         setProfile(profile)
 
         resolve()
@@ -34,7 +34,7 @@ export function login(email, password) {
 export function loadProfile() {
   return new Promise((resolve, reject) => {
     client.userManagement.fetchProfile()
-      .then((profile) => {  
+      .then((profile) => {
         setProfile(profile)
         resolve()
       }).catch(error => reject(error))

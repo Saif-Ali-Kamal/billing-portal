@@ -4,19 +4,19 @@ class BillingAccount {
     this.client = client;
   }
 
-  addBillingAccount(name, email, billingName, address) {
+  addBillingAccount(name, billingName, address) {
     return new Promise((resolve, reject) => {
       this.client.query({
         query: gql`
         query {
-          Add_Billing_Account(name: $name, email: $email, billingName: $billingName, address: $address ) @billing {
+          Add_Billing_Account(name: $name, billingName: $billingName, address: $address ) @billing {
             status
             error
             message
             result
           }
         }`,
-        variables: { name, email, billingName, address }
+        variables: { name, billingName, address }
       })
         .then(res => {
           const { status, error, message, result } = res.data.Add_Billing_Account

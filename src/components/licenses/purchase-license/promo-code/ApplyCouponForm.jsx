@@ -1,5 +1,5 @@
-import React from 'react';
-import { Row, Col, Form, Input, Button } from 'antd';
+import React, { useState } from 'react';
+import { Form, Input, Button } from 'antd';
 import { incrementPendingRequests, decrementPendingRequests, notify } from '../../../../utils';
 import { applyPromoCode } from "../../../../operations/promoCodes"
 import { useParams } from 'react-router';
@@ -10,13 +10,15 @@ function ApplyCouponForm() {
   const { billingId } = useParams()
 
   const billingCountry = useSelector(state => getBillingAccountCountry(state, billingId))
+  const [appliedOnce, setAppliedOnce] = useState(false)
 
   const handleSubmit = ({ couponCode }) => {
     incrementPendingRequests()
     applyPromoCode(billingId, couponCode)
       .then((amount) => {
         const currencyNotation = billingCountry === "IN" ? "₹" : "$"
-        notify("success", "Success", `Applied promo code successfully. ${currencyNotation}${amount} credited to your billing account`)
+        notify("success", "Success", `Applied promo code successfully. ${currencyNotation}${amount / 100} credited to your billing account`)
+        setAppliedOnce(true)
       })
       .catch((ex) => notify("error", "Error applying promo codes", ex))
       .finally(() => decrementPendingRequests())
@@ -30,7 +32,7 @@ function ApplyCouponForm() {
           <Input placeholder="Coupon code" />
         </Form.Item>
         <Form.Item style={{ marginLeft: 16 }}>
-          <Button htmlType="submit">Apply</Button>
+          <Button htmlType="submit">Apply{appliedOnce ? " another" : ""}</Button>
         </Form.Item>
       </div>
     </Form>

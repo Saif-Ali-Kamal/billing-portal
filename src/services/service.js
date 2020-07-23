@@ -3,6 +3,7 @@ import { getToken } from "../utils"
 import { createGraphQLClient, createRESTClient } from "./client";
 
 import BillingAccount from './billingAccount';
+import Plans from './plans';
 import Invoices from './invoices';
 import Licenses from './licenses';
 import PromoCodes from './promoCodes';
@@ -15,6 +16,7 @@ class Service {
     this.spaceSiteClient = createRESTClient(spaceSiteServerURL, { credentials: "omit" })
     this.userManagement = new UserManagement(this.billingClient)
     this.billingAccount = new BillingAccount(this.billingClient)
+    this.plans = new Plans(this.billingClient)
     this.invoices = new Invoices(this.billingClient)
     this.licenses = new Licenses(this.billingClient)
     this.promoCodes = new PromoCodes(this.billingClient)

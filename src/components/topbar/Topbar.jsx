@@ -31,8 +31,8 @@ const Topbar = (props) => {
     window.location.reload()
   }
 
-  const avatarContent = (
-    <Row style={{ padding: '0 32px 0 0' }}>
+  const AvatarContent = ({ onClick }) => (
+    <Row style={{ padding: '0 32px 0 0' }} onClick={onClick}>
       <Col lg={{ span: 5 }}>
         <img src={avatarSvg} />
       </Col>
@@ -67,7 +67,7 @@ const Topbar = (props) => {
         </div>}
 
         <div className="right-list" >
-          <Popover className="" content={avatarContent} trigger="click" placement="bottomLeft" overlayStyle={{ textAlign: 'left' }} visible={popoverVisible} >
+          <Popover className="" content={<AvatarContent onClick={() => setPopoverVisible(false)} />} onVisibleChange={setPopoverVisible} trigger="click" placement="bottomLeft" overlayStyle={{ textAlign: 'left' }} visible={popoverVisible} >
             <img src={avatarSvg} style={{ cursor: 'pointer' }} onClick={() => setPopoverVisible(true)} />
           </Popover>
         </div>

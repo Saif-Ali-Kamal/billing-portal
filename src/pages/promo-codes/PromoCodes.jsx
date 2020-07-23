@@ -40,7 +40,7 @@ const PromoCodes = () => {
       applyPromoCode(billingId, promoCode)
         .then((amount) => {
           const currencyNotation = billingCountry === "IN" ? "₹" : "$"
-          notify("success", "Success", `Applied promo code successfully. ${currencyNotation}${amount} credited to your billing account`)
+          notify("success", "Success", `Applied promo code successfully. ${currencyNotation}${amount / 100} credited to your billing account`)
           resolve()
         })
         .catch((ex) => {

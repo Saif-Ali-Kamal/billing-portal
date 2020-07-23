@@ -11,26 +11,28 @@ function FlexContainer({ children }) {
   )
 }
 
-export default function SelectPlan({ handleSelectPlan, handleContactUs }) {
+export default function SelectPlan({ plans, handleSelectPlan, handleContactUs }) {
 
   return (
     <Row className="select-plan">
-      <Col lg={{ span: 11, offset: 0 }} xl={{ span: 8, offset: 3 }}>
-        <Card className="select-plan-card blue-card">
-          <FlexContainer>
-            <div>
-              <h3 className="select-plan-plan blue">PRO</h3>
-              <h1 className="select-plan-amount blue">$150</h1>
-              <p className="select-plan-time blue">per month</p>
-              <Typography.Paragraph style={{ marginBottom: 0 }} ellipsis>2 Clusters</Typography.Paragraph>
-              <Typography.Paragraph style={{ marginBottom: 0 }} ellipsis>1 project</Typography.Paragraph>
-              <Typography.Paragraph style={{ marginBottom: 0 }} ellipsis>3 databases</Typography.Paragraph>
-              <Typography.Paragraph style={{ marginBottom: 0 }} ellipsis>Email support (48 hrs response time)</Typography.Paragraph>
-            </div>
-            <Button size="large" className="select-plan-button blue-button" onClick={() => handleSelectPlan("space-cloud-pro--monthly")}>Purchase</Button>
-          </FlexContainer>
-        </Card>
-      </Col>
+      {plans.map(({ id, name, amount, currency, quotas = {} }) => (
+        <Col lg={{ span: 11, offset: 0 }} xl={{ span: 8, offset: 3 }}>
+          <Card className="select-plan-card blue-card">
+            <FlexContainer>
+              <div>
+                <h3 className="select-plan-plan blue">{name}</h3>
+                <h1 className="select-plan-amount blue">{currency}{amount}</h1>
+                <p className="select-plan-time blue">per month</p>
+                <Typography.Paragraph style={{ marginBottom: 0 }} ellipsis>{quotas.maxClusters} Clusters</Typography.Paragraph>
+                <Typography.Paragraph style={{ marginBottom: 0 }} ellipsis>{quotas.maxProjects} projects</Typography.Paragraph>
+                <Typography.Paragraph style={{ marginBottom: 0 }} ellipsis>{quotas.maxDatabases} databases</Typography.Paragraph>
+                <Typography.Paragraph style={{ marginBottom: 0 }} ellipsis>Email support (48 hrs response time)</Typography.Paragraph>
+              </div>
+              <Button size="large" className="select-plan-button blue-button" onClick={() => handleSelectPlan(id)}>Purchase</Button>
+            </FlexContainer>
+          </Card>
+        </Col>
+      ))}
       <Col lg={{ span: 11, offset: 1 }} xl={{ span: 8, offset: 1 }}>
         <Card className="select-plan-card purple-card">
           <FlexContainer>

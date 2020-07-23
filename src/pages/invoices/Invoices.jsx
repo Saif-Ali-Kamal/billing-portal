@@ -9,7 +9,7 @@ import ProjectPageLayout, { Content } from '../../components/project-page-layout
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useSelector } from 'react-redux';
 import loadInvoices, { getInvoices, getHasMoreInvoices } from "../../operations/invoices"
-import { incrementPendingRequests, decrementPendingRequests, notify } from '../../utils';
+import { incrementPendingRequests, decrementPendingRequests, notify, capitalizeFirstCharacter } from '../../utils';
 
 const Invoices = () => {
   const { billingId } = useParams()
@@ -72,12 +72,13 @@ const Invoices = () => {
       dataIndex: "status",
       key: "status",
       render: (_, record) => {
+        const statusText = capitalizeFirstCharacter(record.status)
         if (record.status === "paid") {
-          return <span style={{ color: "#15CD72" }}>{record.status}</span>
+          return <span style={{ color: "#15CD72" }}>{statusText}</span>
         } else if (record.status === "uncollectible") {
-          return <span style={{ color: "#F5222D" }}>{record.status}</span>
+          return <span style={{ color: "#F5222D" }}>{statusText}</span>
         } else {
-          return record.status
+          return statusText
         }
 
       }

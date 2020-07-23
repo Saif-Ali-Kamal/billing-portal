@@ -7,6 +7,8 @@ import history from "./history";
 import { loadBillingAccounts } from './operations/billingAccount';
 import { increment, decrement } from 'automate-redux';
 
+const months = ["Jan", "Feb", "March", "April", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
 export function incrementPendingRequests() {
   store.dispatch(increment("pendingRequests"))
 }
@@ -16,12 +18,31 @@ export function decrementPendingRequests() {
 }
 
 export const notify = (type, title, msg, duration) => {
-  notification[type]({ message: title, description: msg.toString(), duration: duration });
+  notification[type]({ message: title, description: String(msg), duration: duration });
 }
 
 export function capitalizeFirstCharacter(str) {
   if (!str) return str
   return str.charAt(0).toUpperCase() + str.slice(1)
+}
+
+export const getCurrencyNotation = (currency) => {
+  switch (currency.toLowerCase()) {
+    case "inr":
+      return "₹"
+    default:
+      return "$"
+  }
+}
+
+export function formatDate(dateString) {
+  if (!dateString) return dateString
+  const date = new Date(dateString)
+  const month = date.getMonth()
+  const day = date.getDate()
+  const year = date.getFullYear()
+  const monthText = months[month]
+  return `${monthText} ${day}, ${year}`
 }
 
 export function getToken() {

@@ -5,7 +5,7 @@ import ConditionalFormBlock from "../../../conditional-form-block/ConditionalFor
 import { capitalizeFirstCharacter } from '../../../../utils';
 const { Option } = Select;
 
-const SubscriptionDetail = ({ handleSuccess, creditCards = [], planDetails = {} }) => {
+const SubscriptionDetail = ({ handleSuccess, creditCards = [], planDetails = { quotas: {} } }) => {
   const [form] = Form.useForm()
   const handleSubmitClick = (values) => {
     handleSuccess(values.creditCard)
@@ -14,10 +14,10 @@ const SubscriptionDetail = ({ handleSuccess, creditCards = [], planDetails = {} 
   return (
     <Card style={{ boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)', borderRadius: '10px', padding: '24px' }}>
       <p><b>Subscription details</b></p>
-      <Card title={<p style={{ fontSize: "18px" }}>{planDetails.name} Plan</p>} extra={<p style={{ fontSize: "18px" }}><span style={{ color: "#34A853" }}>${planDetails.amount}</span>/month</p>}>
-        <p><b>Total Clusters</b>: {planDetails.clusters}</p>
-        <p><b>Total Projects</b>: {planDetails.projects}</p>
-        <p><b>Total Databases</b>: {planDetails.databases} per project</p>
+      <Card title={<p style={{ fontSize: "18px" }}>{planDetails.name} Plan</p>} extra={<p style={{ fontSize: "18px" }}><span style={{ color: "#34A853" }}>{planDetails.currency}{planDetails.amount}</span>/month</p>}>
+        <p><b>Total Clusters</b>: {planDetails.quotas.maxClusters}</p>
+        <p><b>Total Projects</b>: {planDetails.quotas.maxProjects}</p>
+        <p><b>Total Databases</b>: {planDetails.quotas.maxDatabases} per project</p>
       </Card>
       <ApplyCouponForm />
       <Form form={form} onFinish={handleSubmitClick} initialValues={{ useDefaultCard: true }}>

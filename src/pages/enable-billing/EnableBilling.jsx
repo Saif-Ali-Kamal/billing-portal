@@ -9,6 +9,7 @@ import { isEmailVerified, isBillingEnabled, verifyEmail, resendEmailVerification
 import { openBillingAccount, incrementPendingRequests, notify, decrementPendingRequests } from '../../utils';
 import { addBillingAccount } from '../../operations/billingAccount';
 import { useHistory } from 'react-router';
+import { useEffect } from 'react';
 const { Step } = Steps;
 
 const EnableBilling = () => {
@@ -19,8 +20,12 @@ const EnableBilling = () => {
   const { email } = useSelector(state => getProfile(state))
   const emailVerified = useSelector(state => isEmailVerified(state))
   const billingEnabled = useSelector(state => isBillingEnabled(state))
+  const initialStep = emailVerified ? 1 : 0
+  const [current, setCurrent] = useState(initialStep)
 
-  const [current, setCurrent] = useState(emailVerified ? 1 : 0)
+  useEffect(() => {
+    setCurrent(initialStep)
+  }, [initialStep])
 
   // Handlers
   const handleVerify = (code) => {

@@ -8,7 +8,7 @@ import avatarSvg from '../../assets/avatar.svg';
 import { getProfile, changePassword } from '../../operations/userManagement';
 import { useSelector } from 'react-redux';
 import ChangePassword from "../../components/change-password/ChangePassword";
-import { incrementPendingRequests, decrementPendingRequests, notify } from '../../utils';
+import { incrementPendingRequests, decrementPendingRequests, notify, formatDate } from '../../utils';
 
 const Profile = () => {
   useEffect(() => {
@@ -54,7 +54,7 @@ const Profile = () => {
                       <p style={{ color: "rgba(0,0,0,0.45)", marginBottom: 4 }}>{email}</p>
                       <div style={{ color: "rgba(0,0,0,0.45)", marginBottom: 4, display: "flex", alignItems: "center" }}>
                         <i className="material-icons-outlined" style={{ fontSize: 16 }}>calendar_today</i>
-                        <span style={{ marginLeft: 8 }}>{creation_date}</span>
+                        <span style={{ marginLeft: 8 }}>{formatDate(creation_date)}</span>
                       </div>
                     </div>
                   </div>

@@ -32,7 +32,7 @@ const SignupForm = (props) => {
             <Input.Password placeholder="Type your password" />
           </Form.Item>
           <Checkbox disabled={!termsServices || !privacyPolicy} onChange={(e) => setChecked(e.target.checked)} style={{ marginTop: 16 }} checked={checked}>
-            <span style={{ marginLeft: '8px' }}>I have read and agreed to the <a href="https://spaceuptech.com" target="_blank" onClick={() => setTermsServices(true)}>Terms of Service</a> and <a href="https://spaceuptech.com" onClick={() => setPrivacyPolicy(true)}>Privacy Policy</a></span>
+            <span style={{ marginLeft: '8px' }}>I have read and agreed to the <a href="https://spaceuptech.com" target="_blank" onClick={() => setTermsServices(true)}>Terms of Service</a> and <a href="https://spaceuptech.com" target="_blank" onClick={() => setPrivacyPolicy(true)}>Privacy Policy</a></span>
           </Checkbox>
           <Form.Item noStyle>
             <Button type='primary' block size="large" htmlType="submit" disabled={!checked} style={{ marginTop: 16 }}>Create account</Button>

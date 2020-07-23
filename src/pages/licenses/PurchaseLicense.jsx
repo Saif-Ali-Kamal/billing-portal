@@ -12,13 +12,20 @@ import { getCards } from "../../operations/billingAccount"
 import { createSubscription } from "../../operations/licenses";
 import { notify, incrementPendingRequests, decrementPendingRequests } from '../../utils';
 import { useSelector } from 'react-redux';
-import { plans } from '../../constant';
+import { loadPlans, getPlans } from '../../operations/plans';
 
 const { Step } = Steps;
 
 const PurchaseLicense = () => {
   useEffect(() => {
     ReactGA.pageview("/billing/licenses/purchase-license");
+  }, [])
+
+  useEffect(() => {
+    incrementPendingRequests()
+    loadPlans()
+      .catch((ex) => notify("error", "Error fetching plans", ex))
+      .finally(() => decrementPendingRequests())
   }, [])
 
   const history = useHistory();
@@ -31,6 +38,7 @@ const PurchaseLicense = () => {
 
   // Global state
   const cards = useSelector(state => getCards(state, billingId))
+  const plans = useSelector(state => getPlans(state, billingId))
 
   // Derived state
   const selectedPlanDetails = plans.find(obj => obj.id === selectedPlanId)
@@ -59,7 +67,7 @@ const PurchaseLicense = () => {
     content: <React.Fragment>
       <Row>
         <Col lg={{ span: 18, offset: 3 }}>
-          <SelectPlan handleContactUs={handleContactUs} handleSelectPlan={handleSelectPlan} />
+          <SelectPlan handleContactUs={handleContactUs} handleSelectPlan={handleSelectPlan} plans={plans} />
         </Col>
       </Row>
     </React.Fragment>

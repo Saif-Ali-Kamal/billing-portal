@@ -18,9 +18,8 @@ export function addBillingAccount(stripeClient, cardElement, billingAccountName,
   return new Promise((resolve, reject) => {
     const state = store.getState()
     const { name, encrypted_email } = getProfile(state)
-    console.log("Email",encrypted_email);
-    
-    client.billingAccount.addBillingAccount(name, encrypted_email, billingAccountName, address)
+
+    client.billingAccount.addBillingAccount(name, billingAccountName, address)
       .then((result) => {
         const { clientSecret, billingId } = result
         stripeClient.confirmCardSetup(clientSecret, {
@@ -94,7 +93,7 @@ export function removeCard(billingId, cardId) {
       .then(() => {
         const cards = getCards(store.getState(), billingId)
         const newCards = cards.filter(card => card.id !== cardId)
-        setCards(billingId,newCards)
+        setCards(billingId, newCards)
         resolve()
       })
       .catch(ex => reject(ex))
@@ -106,8 +105,8 @@ export function setDefaultCard(billingId, cardId) {
     client.billingAccount.setDefaultCard(billingId, cardId)
       .then(() => {
         const cards = getCards(store.getState(), billingId)
-        const newCards = cards.map(card => card.id === cardId ? Object.assign({}, card, { isDefault: true }) : card)
-        setCards(billingId,newCards)
+        const newCards = cards.map(card => Object.assign({}, card, card.id === cardId ? { isDefault: true } : { isDefault: false }))
+        setCards(billingId, newCards)
         resolve()
       })
       .catch(ex => reject(ex))

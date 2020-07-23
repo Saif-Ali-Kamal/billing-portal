@@ -7,7 +7,7 @@ import Sidenav from '../../components/sidenav/Sidenav';
 import ProjectPageLayout, { Content } from '../../components/project-page-layout/ProjectPageLayout';
 import TableExpandIcon from "../../components/table-expand-icon/TableExpandIcon"
 import { useSelector } from 'react-redux';
-import { getBillingAccounts, removeCard,setDefaultCard } from '../../operations/billingAccount';
+import { getBillingAccounts, removeCard, setDefaultCard } from '../../operations/billingAccount';
 import { capitalizeFirstCharacter, incrementPendingRequests, notify, decrementPendingRequests } from '../../utils';
 
 const BillingAccounts = () => {
@@ -55,7 +55,7 @@ const BillingAccounts = () => {
     },
     {
       title: 'Balance Credit',
-      render: (_, { balance }) => `$${balance / 100}`
+      render: (_, { balance }) => `$${balance * -1 / 100}` // Balance fetched from backend is negative
     }
   ]
 
@@ -71,7 +71,7 @@ const BillingAccounts = () => {
       },
       {
         title: 'Default card',
-        render: (_, { isDefault,id }) => <Radio checked={isDefault} onChange={() => handleClickSetDefaultCard(id)} />
+        render: (_, { isDefault, id }) => <Radio checked={isDefault} onChange={() => handleClickSetDefaultCard(id)} />
       },
       {
         title: 'Card expiry',
