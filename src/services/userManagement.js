@@ -87,6 +87,10 @@ class UserManagement {
         variables: {}
       })
         .then(res => {
+          if (res.errors && res.errors.length > 0) {
+            reject(res.errors[0])
+            return
+          }
           const { status, error, message, result } = res.data.Fetch_Profile
           if (status !== 200) {
             reject(message)

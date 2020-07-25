@@ -25,7 +25,8 @@ export function getPlans(state, billingId) {
   const billingAccountCountryCode = getBillingAccountCountry(state, billingId)
   const plans = get(state, "plans", [])
   const countrySuffix = countryPlanSuffixMapping[billingAccountCountryCode] ? countryPlanSuffixMapping[billingAccountCountryCode] : ""
-  const filteredPlans = plans.filter(obj => obj.id.endsWith("monthly-" + countrySuffix))
+  const planSuffix = countrySuffix ? "monthly-" + countrySuffix : "monthly"
+  const filteredPlans = plans.filter(obj => obj.id.endsWith(planSuffix))
   const result = filteredPlans.map(obj => {
     const product = obj.products[0]
     const name = product.name.replace("Space Cloud - ", "").replace(" Plan", "")

@@ -37,7 +37,10 @@ export function loadProfile() {
       .then((profile) => {
         setProfile(profile)
         resolve()
-      }).catch(error => reject(error))
+      }).catch(error => {
+        reject(error)
+        localStorage.clear();
+      })
   });
 }
 
