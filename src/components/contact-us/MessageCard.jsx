@@ -12,7 +12,7 @@ const MessageCard = () => {
 						<MailOutlined />
 					</Avatar>
 					<p style={{ fontSize: "16px", marginTop: "24px" }}>Have any questions or grievances?</p>
-					<p style={{ fontSize: "14px" }}>Shoot us a message and we will help you out ASAP! Promise ❤️</p>
+					<p style={{ fontSize: "14px" }}>Shoot us a message and we will help you out ASAP!</p>
 				</Card>
 			</Col>
 		</Row>

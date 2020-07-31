@@ -11,6 +11,10 @@
   width: 80%;
 }
 
+.select-plan p {
+  margin-bottom: 0;
+}
+
 .select-plan .selected-button {
   background-color: #fafafa;
   color: rgba(0, 0, 0, 0.6);

@@ -16,7 +16,7 @@ const Profile = () => {
   }, [])
 
   // Global state
-  const { name, email, creation_date } = useSelector(state => getProfile(state))
+  const { name, encrypted_email, creation_date } = useSelector(state => getProfile(state))
 
   // Component state
   const [modalVisible, setModalVisible] = useState(false)
@@ -51,7 +51,7 @@ const Profile = () => {
                     <img src={avatarSvg} />
                     <div style={{ display: "inline-block", marginLeft: 16 }}>
                       <p style={{ color: "rgba(0,0,0,0.87)", marginBottom: 4 }}>{name}</p>
-                      <p style={{ color: "rgba(0,0,0,0.45)", marginBottom: 4 }}>{email}</p>
+                      <p style={{ color: "rgba(0,0,0,0.45)", marginBottom: 4 }}>{encrypted_email}</p>
                       <div style={{ color: "rgba(0,0,0,0.45)", marginBottom: 4, display: "flex", alignItems: "center" }}>
                         <i className="material-icons-outlined" style={{ fontSize: 16 }}>calendar_today</i>
                         <span style={{ marginLeft: 8 }}>{formatDate(creation_date)}</span>

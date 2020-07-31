@@ -5,7 +5,7 @@ import { isLoggedIn, isBillingEnabled, loadProfile, getProfileBillingAccounts } 
 import store from './store';
 import history from "./history";
 import { loadBillingAccounts } from './operations/billingAccount';
-import { increment, decrement } from 'automate-redux';
+import { increment, decrement, set, get } from 'automate-redux';
 
 const months = ["Jan", "Feb", "March", "April", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
@@ -15,6 +15,14 @@ export function incrementPendingRequests() {
 
 export function decrementPendingRequests() {
   store.dispatch(decrement("pendingRequests"))
+}
+
+export function markSetupComplete() {
+  store.dispatch(set("setupComplete", true))
+}
+
+export function isSetupComplete(state) {
+  return get(state, "setupComplete", false)
 }
 
 export const notify = (type, title, msg, duration) => {
@@ -81,32 +89,43 @@ export function openBillingAccount(billingId) {
 }
 
 export function performOnTokenActions() {
-  loadProfile()
-    .then(() => {
-      const billingEnabled = isBillingEnabled(store.getState())
-      if (!billingEnabled) {
-        history.push("/enable-billing")
-        return
-      }
+  return new Promise((resolve, reject) => {
+    loadProfile()
+      .then(() => {
+        const billingEnabled = isBillingEnabled(store.getState())
+        if (!billingEnabled) {
+          history.push("/enable-billing")
+          resolve()
+          return
+        }
 
-      // Opens last opened billing account. If no account opened yet, then opens the first account 
-      openBillingAccount()
+        // Opens last opened billing account. If no account opened yet, then opens the first account 
+        openBillingAccount()
 
-      // Load information about all the billing accounts in background
-      loadBillingAccounts()
-    })
+        // Load information about all the billing accounts in background
+        loadBillingAccounts()
+
+        resolve()
+      })
+      .catch(ex => reject(ex))
+  })
 }
 
 export function performOnAppLoadActions() {
-  const loggedIn = isLoggedIn()
-  const pathname = window.location.pathname
-  if (!loggedIn && pathname.startsWith("/billing")) {
-    history.push("/signup")
-    return
-  }
-  if (loggedIn) {
-    performOnTokenActions()
-  }
+  return new Promise((resolve, reject) => {
+    const loggedIn = isLoggedIn()
+    const pathname = window.location.pathname
+    if (!loggedIn && pathname.startsWith("/billing")) {
+      history.push("/signup")
+      resolve()
+      return
+    }
+    if (loggedIn) {
+      performOnTokenActions().then(() => resolve()).catch((ex) => reject(ex))
+      return
+    }
+    resolve()
+  })
 }
 
 export const PrivateRoute = ({ component: Component, ...rest }) => {

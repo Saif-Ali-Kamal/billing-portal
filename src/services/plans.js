@@ -10,18 +10,24 @@ class Plans {
       this.client.query({
         query: gql`
         query {
-          Get_Plans @billing
+          getPlans @billing
         }`,
         variables: {}
       })
         .then(res => {
-          const { status, error, message, result } = res.data.Get_Plans
+          const { status, error, message, result } = res.data.getPlans
           if (status !== 200) {
             reject(message)
             console.log("Error getting plans", error)
             return
           }
-          resolve(result)
+
+          const { plans, billing_plan_mapping } = result
+          if (!plans) plans = []
+          if (!billing_plan_mapping) billing_plan_mapping = []
+
+          const totalPlans = [...plans, ...billing_plan_mapping]
+          resolve(totalPlans)
         })
         .catch(ex => reject(ex))
     })

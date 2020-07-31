@@ -31,11 +31,12 @@ export function getPlans(state, billingId) {
     const product = obj.products[0]
     const name = product.name.replace("Space Cloud - ", "").replace(" Plan", "")
     return {
-      id: obj.id.replace(`-${countrySuffix}`, ""),
+      id: countrySuffix ? obj.id.replace(`-${countrySuffix}`, ""): obj.id,
       name: name,
       amount: obj.amount / 100,
       currency: getCurrencyNotation(obj.currency),
-      quotas: product.quotas
+      quotas: product.quotas,
+      details: product.details
     }
   })
   return result

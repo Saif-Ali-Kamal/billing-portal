@@ -9,12 +9,12 @@ class PromoCodes {
       this.client.query({
         query: gql`
         query {
-          Get_Promotions(billingId: $billingId) @billing
+          getPromotions(billingId: $billingId) @billing
         }`,
         variables: { billingId }
       })
         .then(res => {
-          const { status, error, message, result } = res.data.Get_Promotions
+          const { status, error, message, result } = res.data.getPromotions
           if (status !== 200) {
             reject(message)
             console.log("Error fetching applied promotion codes", error)
@@ -32,7 +32,7 @@ class PromoCodes {
       this.client.query({
         query: gql`
         query {
-          Apply_Promotion_Customer(billingId: $billingId, promotionCode: $promotionCode) @billing {
+          applyPromotionCustomer(billingId: $billingId, promotionCode: $promotionCode) @billing {
             status
             error
             message
@@ -42,7 +42,7 @@ class PromoCodes {
         variables: { billingId, promotionCode }
       })
         .then(res => {
-          const { status, error, message, result } = res.data.Apply_Promotion_Customer
+          const { status, error, message, result } = res.data.applyPromotionCustomer
           if (status !== 200) {
             reject(message)
             console.log("Error applying promotion code", error)

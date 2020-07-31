@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, Row, Col, Button, Typography } from 'antd';
 import crownSvg from '../../../../assets/crown.svg';
 import './select-plan.css';
+import ReactMarkdown from "react-markdown"
 
 function FlexContainer({ children }) {
   return (
@@ -12,10 +13,9 @@ function FlexContainer({ children }) {
 }
 
 export default function SelectPlan({ plans, handleSelectPlan, handleContactUs }) {
-
   return (
     <Row className="select-plan">
-      {plans.map(({ id, name, amount, currency, quotas = {} }) => (
+      {plans.map(({ id, name, amount, currency, details }) => (
         <Col lg={{ span: 11, offset: 0 }} xl={{ span: 8, offset: 3 }}>
           <Card className="select-plan-card blue-card">
             <FlexContainer>
@@ -23,10 +23,7 @@ export default function SelectPlan({ plans, handleSelectPlan, handleContactUs })
                 <h3 className="select-plan-plan blue">{name}</h3>
                 <h1 className="select-plan-amount blue">{currency}{amount}</h1>
                 <p className="select-plan-time blue">per month</p>
-                <Typography.Paragraph style={{ marginBottom: 0 }} ellipsis>{quotas.maxClusters} Clusters</Typography.Paragraph>
-                <Typography.Paragraph style={{ marginBottom: 0 }} ellipsis>{quotas.maxProjects} projects</Typography.Paragraph>
-                <Typography.Paragraph style={{ marginBottom: 0 }} ellipsis>{quotas.maxDatabases} databases</Typography.Paragraph>
-                <Typography.Paragraph style={{ marginBottom: 0 }} ellipsis>Email support (48 hrs response time)</Typography.Paragraph>
+                <ReactMarkdown source={details} />
               </div>
               <Button size="large" className="select-plan-button blue-button" onClick={() => handleSelectPlan(id)}>Purchase</Button>
             </FlexContainer>

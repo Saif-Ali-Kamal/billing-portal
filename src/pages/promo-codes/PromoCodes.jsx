@@ -7,7 +7,7 @@ import Sidenav from '../../components/sidenav/Sidenav';
 import ProjectPageLayout, { Content } from '../../components/project-page-layout/ProjectPageLayout';
 import ApplyCouponModal from '../../components/promo-codes/ApplyCouponModal';
 import emptyStateSvg from '../../assets/rabit.svg';
-import { incrementPendingRequests, decrementPendingRequests, notify } from '../../utils';
+import { incrementPendingRequests, decrementPendingRequests, notify, formatDate } from '../../utils';
 import { loadPromoCodes, applyPromoCode, getPromoCodes } from '../../operations/promoCodes';
 import { useSelector } from 'react-redux';
 import { getBillingAccountCountry } from '../../operations/billingAccount';
@@ -77,7 +77,7 @@ const PromoCodes = () => {
     },
     {
       title: 'Applied on',
-      render: (_, { time_stamp }) => time_stamp
+      render: (_, { time_stamp }) => formatDate(time_stamp)
     }
   ]
 

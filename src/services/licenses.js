@@ -9,12 +9,12 @@ class Licenses {
       this.client.query({
         query: gql`
         query {
-          Get_Licenses (billingId: $billingId) @billing
+          getLicenses (billingId: $billingId) @billing
         }`,
         variables: { billingId }
       })
         .then(res => {
-          const { status, error, message, result } = res.data.Get_Licenses
+          const { status, error, message, result } = res.data.getLicenses
           if (status !== 200) {
             reject(message)
             console.log("Error fetching licenses", error)
@@ -32,7 +32,7 @@ class Licenses {
       this.client.query({
         query: gql`
         query {
-          Create_Subscription(billingId: $billingId, plans: $plans${cardId ? ", cardId: $cardId" : ""}) @billing {
+          createSubscription(billingId: $billingId, plans: $plans${cardId ? ", cardId: $cardId" : ""}) @billing {
             status
             error
             message
@@ -42,7 +42,7 @@ class Licenses {
         variables: { billingId, plans, cardId }
       })
         .then(res => {
-          const { status, error, message, result } = res.data.Create_Subscription
+          const { status, error, message, result } = res.data.createSubscription
           if (status !== 200) {
             reject(message)
             console.log("Error creating subscription", error)
@@ -73,7 +73,7 @@ class Licenses {
       this.client.query({
         query: gql`
         query {
-          Deactivate_License(licenses: $licenses, billingId: $billingId) @billing {
+          deactivateLicense(licenses: $licenses, billingId: $billingId) @billing {
             status
             error
             message
@@ -82,7 +82,7 @@ class Licenses {
         variables: { billingId, licenses }
       })
         .then(res => {
-          const { status, error, message } = res.data.Deactivate_License
+          const { status, error, message } = res.data.deactivateLicense
           if (status !== 200) {
             reject(message)
             console.log("Error deactivating licenses", error)
@@ -100,7 +100,7 @@ class Licenses {
       this.client.query({
         query: gql`
         query {
-          Renew_License(licenses: $licenses, billingId: $billingId) @billing {
+          renewLicense(licenses: $licenses, billingId: $billingId) @billing {
             status
             error
             message
@@ -109,7 +109,7 @@ class Licenses {
         variables: { billingId, licenses }
       })
         .then(res => {
-          const { status, error, message } = res.data.Renew_License
+          const { status, error, message } = res.data.renewLicense
           if (status !== 200) {
             reject(message)
             console.log("Error renewing licenses", error)
@@ -127,7 +127,7 @@ class Licenses {
       this.client.query({
         query: gql`
         query {
-          Remove_License_key(billingId: $billingId, licenseId: $licenseId, licenseKey: $licenseKey) @billing {
+          removeLicensekey(billingId: $billingId, licenseId: $licenseId, licenseKey: $licenseKey) @billing {
             status
             error
             message
@@ -136,7 +136,7 @@ class Licenses {
         variables: { billingId, licenseId, licenseKey }
       })
         .then(res => {
-          const { status, error, message } = res.data.Remove_License_key
+          const { status, error, message } = res.data.removeLicensekey
           if (status !== 200) {
             reject(message)
             console.log("Error removing license key", error)

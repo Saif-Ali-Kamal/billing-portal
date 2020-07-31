@@ -11,7 +11,7 @@ export function signup(name, organizationName, email, password) {
         saveToken(token)
 
         // Set the profile, so that it can be visible in the topbar
-        const profile = { name, encrypted_email: email }
+        const profile = { name, encrypted_email: email, creation_date: new Date().toDateString() }
         setProfile(profile)
 
         resolve()

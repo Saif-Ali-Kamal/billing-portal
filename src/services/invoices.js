@@ -9,7 +9,7 @@ class Invoices {
       this.client.query({
         query: gql`
         query {
-          Invoices(billingId: $billingId${startingAfter ? ", startingAfter: $startingAfter" : ""}) @billing {
+          invoices(billingId: $billingId${startingAfter ? ", startingAfter: $startingAfter" : ""}) @billing {
             status
             error
             message
@@ -19,7 +19,7 @@ class Invoices {
         variables: { billingId, startingAfter }
       })
         .then(res => {
-          const { status, error, message, result } = res.data.Invoices
+          const { status, error, message, result } = res.data.invoices
           if (status !== 200) {
             reject(message)
             console.log("Error fetching invoices", error)

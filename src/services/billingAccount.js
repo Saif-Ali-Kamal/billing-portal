@@ -9,7 +9,7 @@ class BillingAccount {
       this.client.query({
         query: gql`
         query {
-          Add_Billing_Account(name: $name, billingName: $billingName, address: $address ) @billing {
+          addBillingAccount(name: $name, billingName: $billingName, address: $address ) @billing {
             status
             error
             message
@@ -19,7 +19,7 @@ class BillingAccount {
         variables: { name, billingName, address }
       })
         .then(res => {
-          const { status, error, message, result } = res.data.Add_Billing_Account
+          const { status, error, message, result } = res.data.addBillingAccount
           if (status !== 200) {
             reject(message)
             console.log("Error adding billing account", error)
@@ -36,12 +36,12 @@ class BillingAccount {
       this.client.query({
         query: gql`
         query {
-          Get_Billing_Accounts @billing 
+          getBillingAccounts @billing 
         }`,
         variables: {}
       })
         .then(res => {
-          const { status, error, message, result } = res.data.Get_Billing_Accounts
+          const { status, error, message, result } = res.data.getBillingAccounts
           if (status !== 200) {
             reject(message)
             console.log("Error fetching billing accounts", error)
@@ -58,7 +58,7 @@ class BillingAccount {
       this.client.query({
         query: gql`
         query {
-          Add_Card(billingId: $billingId) @billing {
+          addCard(billingId: $billingId) @billing {
             status
             error
             message
@@ -68,7 +68,7 @@ class BillingAccount {
         variables: { billingId }
       })
         .then(res => {
-          const { status, error, message, result } = res.data.Add_Card
+          const { status, error, message, result } = res.data.addCard
           if (status !== 200) {
             reject(message)
             console.log("Error adding card", error)
@@ -85,7 +85,7 @@ class BillingAccount {
       this.client.query({
         query: gql`
         query {
-          Remove_Card(billingId: $billingId, cardId: $cardId) @billing {
+          removeCard(billingId: $billingId, cardId: $cardId) @billing {
             status
             error
             message
@@ -94,7 +94,7 @@ class BillingAccount {
         variables: { billingId, cardId }
       })
         .then(res => {
-          const { status, error, message } = res.data.Remove_Card
+          const { status, error, message } = res.data.removeCard
           if (status !== 200) {
             reject(message)
             console.log("Error removing card", error)
@@ -111,7 +111,7 @@ class BillingAccount {
       this.client.query({
         query: gql`
         query {
-          Set_Default_Card(billingId: $billingId, cardId: $cardId) @billing {
+          setDefaultCard(billingId: $billingId, cardId: $cardId) @billing {
             status
             error
             message
@@ -120,7 +120,7 @@ class BillingAccount {
         variables: { billingId, cardId }
       })
         .then(res => {
-          const { status, error, message } = res.data.Set_Default_Card
+          const { status, error, message } = res.data.setDefaultCard
           if (status !== 200) {
             reject(message)
             console.log("Error setting default card", error)
