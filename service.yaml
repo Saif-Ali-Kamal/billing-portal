@@ -1,0 +1,38 @@
+api: /v1/runner/{project}/services/{id}/{version}
+meta:
+  id: billingportal
+  project: spacecloud
+  version: v1
+spec:
+  affinity: []
+  labels: {}
+  scale:
+    concurrency: 50
+    maxReplicas: 100
+    minReplicas: 1
+    mode: parallel
+    replicas: 1
+  tasks:
+  - docker:
+      cmd: []
+      image: us.gcr.io/space-cloud/spacecloud-billingportal:v1
+      imagePullPolicy: pull-if-not-exists
+      secret: ""
+    env: {}
+    id: billingportal
+    ports:
+    - name: http
+      port: 3000
+      protocol: http
+    resources:
+      cpu: 250
+      memory: 512
+    runtime: image
+    secrets: []
+  upstreams:
+  - projectId: spacecloud
+    service: '*'
+  whitelists:
+  - projectId: spacecloud
+    service: '*'
+type: service
