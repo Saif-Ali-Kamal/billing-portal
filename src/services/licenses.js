@@ -127,7 +127,7 @@ class Licenses {
       this.client.query({
         query: gql`
         query {
-          removeLicensekey(billingId: $billingId, licenseId: $licenseId, licenseKey: $licenseKey) @billing {
+          removeLicenseKey(billingId: $billingId, licenseId: $licenseId, licenseKey: $licenseKey) @billing {
             status
             error
             message
@@ -136,7 +136,7 @@ class Licenses {
         variables: { billingId, licenseId, licenseKey }
       })
         .then(res => {
-          const { status, error, message } = res.data.removeLicensekey
+          const { status, error, message } = res.data.removeLicenseKey
           if (status !== 200) {
             reject(message)
             console.log("Error removing license key", error)
