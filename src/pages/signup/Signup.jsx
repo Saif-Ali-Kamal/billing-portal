@@ -16,7 +16,7 @@ const Signup = () => {
         notify('success', 'Success', 'Signup successful')
         history.push("/enable-billing")
       })
-      .catch(ex => notify('error', 'Error in signup', ex))
+      .catch(ex => notify('error', 'Error', ex))
       .finally(() => decrementPendingRequests())
   }
 

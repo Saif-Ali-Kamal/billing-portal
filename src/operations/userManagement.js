@@ -5,17 +5,24 @@ import { getToken, saveToken } from "../utils";
 
 export function signup(name, organizationName, email, password) {
   return new Promise((resolve, reject) => {
-    client.userManagement.signUp(name, organizationName, email, password)
-      .then((token) => {
-        // Save the token for future use 
-        saveToken(token)
-
-        // Set the profile, so that it can be visible in the topbar
-        const profile = { name, encrypted_email: email, creation_date: new Date().toDateString() }
-        setProfile(profile)
-
-        resolve()
-      }).catch(error => reject(error))
+    client.userManagement.fetchIpAddress()
+      .then(({ sourceIp, countryCode }) => {
+        client.userManagement.signUp(name, organizationName, email, password, sourceIp, countryCode)
+        .then((token) => {
+          // Save the token for future use 
+          saveToken(token)
+  
+          // Set the profile, so that it can be visible in the topbar
+          const profile = { name, encrypted_email: email, creation_date: new Date().toDateString() }
+          setProfile(profile)
+  
+          resolve()
+        }).catch(error => reject(error))
+      })
+      .catch(ex => {
+        reject("Error initiating signup request")
+        console.log("Error initiating signup request", ex)
+      })
   });
 }
 

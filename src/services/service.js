@@ -14,7 +14,8 @@ class Service {
   constructor() {
     this.billingClient = createGraphQLClient(billingServerGraphQLURL, getToken)
     this.spaceSiteClient = createRESTClient(spaceSiteServerURL, { credentials: "omit" })
-    this.userManagement = new UserManagement(this.billingClient)
+    this.ipAPIClient = createRESTClient(undefined, { credentials: "omit" })
+    this.userManagement = new UserManagement(this.billingClient, this.ipAPIClient)
     this.billingAccount = new BillingAccount(this.billingClient)
     this.plans = new Plans(this.billingClient)
     this.invoices = new Invoices(this.billingClient)
