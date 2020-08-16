@@ -7,7 +7,7 @@ import history from "./history";
 import { loadBillingAccounts } from './operations/billingAccount';
 import { increment, decrement, set, get } from 'automate-redux';
 
-const months = ["Jan", "Feb", "March", "April", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"]
+const months = ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
 export function incrementPendingRequests() {
   store.dispatch(increment("pendingRequests"))
