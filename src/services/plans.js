@@ -5,14 +5,14 @@ class Plans {
     this.client = client;
   }
 
-  fetchPlans() {
+  fetchPlans(billingId) {
     return new Promise((resolve, reject) => {
       this.client.query({
         query: gql`
         query {
-          getPlans @billing
+          getPlans(billingId: $billingId) @billing
         }`,
-        variables: {}
+        variables: { billingId }
       })
         .then(res => {
           const { status, error, message, result } = res.data.getPlans

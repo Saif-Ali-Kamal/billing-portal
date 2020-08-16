@@ -17,19 +17,22 @@ import { loadPlans, getPlans } from '../../operations/plans';
 const { Step } = Steps;
 
 const PurchaseLicense = () => {
+
+  const history = useHistory();
+  const { billingId } = useParams();
+  
   useEffect(() => {
     ReactGA.pageview("/billing/licenses/purchase-license");
   }, [])
 
   useEffect(() => {
-    incrementPendingRequests()
-    loadPlans()
-      .catch((ex) => notify("error", "Error fetching plans", ex))
-      .finally(() => decrementPendingRequests())
-  }, [])
-
-  const history = useHistory();
-  const { billingId } = useParams();
+    if (billingId) {
+      incrementPendingRequests()
+      loadPlans(billingId)
+        .catch((ex) => notify("error", "Error fetching plans", ex))
+        .finally(() => decrementPendingRequests())
+    }
+  }, [billingId])
 
   // Component state
   const [current, setCurrent] = useState(0);

@@ -45,8 +45,8 @@ export function loadProfile() {
         setProfile(profile)
         resolve()
       }).catch(error => {
-        reject(error)
         localStorage.clear();
+        reject(error)
       })
   });
 }

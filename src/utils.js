@@ -121,7 +121,13 @@ export function performOnAppLoadActions() {
       return
     }
     if (loggedIn) {
-      performOnTokenActions().then(() => resolve()).catch((ex) => reject(ex))
+      performOnTokenActions()
+        .then(() => resolve())
+        .catch((ex) => {
+          console.log("Error loading profile", ex)
+          history.push("/signup")
+          reject(ex)
+        })
       return
     }
     resolve()

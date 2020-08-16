@@ -5,9 +5,9 @@ import { countryPlanSuffixMapping } from '../constant';
 import { getBillingAccountCountry } from './billingAccount';
 import { getCurrencyNotation } from '../utils';
 
-export function loadPlans() {
+export function loadPlans(billingId) {
   return new Promise((resolve, reject) => {
-    client.plans.fetchPlans()
+    client.plans.fetchPlans(billingId)
       .then((plans) => {
         setPlans(plans)
         resolve()
@@ -31,11 +31,11 @@ export function getPlans(state, billingId) {
     const product = obj.products[0]
     const name = product.name.replace("Space Cloud - ", "").replace(" Plan", "")
     return {
-      id: countrySuffix ? obj.id.replace(`-${countrySuffix}`, ""): obj.id,
+      id: countrySuffix ? obj.id.replace(`-${countrySuffix}`, "") : obj.id,
       name: name,
       amount: obj.amount / 100,
       currency: getCurrencyNotation(obj.currency),
-      quotas: product.quotas,
+      meta: product.meta,
       details: product.details
     }
   })

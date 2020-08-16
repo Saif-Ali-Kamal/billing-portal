@@ -22,11 +22,11 @@ const BillingAccounts = () => {
   const billingAccounts = useSelector(state => getBillingAccounts(state))
 
   // Handlers
-  const handleClickAddCard = () => history.push(`/billing/${billingId}/billing-accounts/add-card`)
+  const handleClickAddCard = (targetBillingId) => history.push(`/billing/${targetBillingId}/billing-accounts/add-card`, { openerBillingId: billingId })
 
-  const handleClickAddBillingAccount = () => history.push(`/billing/${billingId}/billing-accounts/add-account`)
+  const handleClickAddBillingAccount = () => history.push(`/billing/${billingId}/billing-accounts/add-account`,  { openerBillingId: billingId })
 
-  const handleClickDeleteCard = (cardId) => {
+  const handleClickDeleteCard = (billingId, cardId) => {
     incrementPendingRequests()
     removeCard(billingId, cardId)
       .then(() => notify("success", "Success", "Deleted card successfully"))
@@ -34,7 +34,7 @@ const BillingAccounts = () => {
       .finally(() => decrementPendingRequests())
   }
 
-  const handleClickSetDefaultCard = (cardId) => {
+  const handleClickSetDefaultCard = (billingId, cardId) => {
     incrementPendingRequests()
     setDefaultCard(billingId, cardId)
       .then(() => notify("success", "Success", "Updated default card successfully"))
@@ -59,7 +59,7 @@ const BillingAccounts = () => {
     }
   ]
 
-  const expandedRowRender = ({ cards = [] }) => {
+  const expandedRowRender = ({ id: billingId, cards = [] }) => {
     const cardsColumn = [
       {
         title: 'Card type',
@@ -81,7 +81,7 @@ const BillingAccounts = () => {
       {
         title: 'Action',
         key: 'action',
-        render: (_, { id }) => (<Popconfirm title={`This will delete the card. Are you sure?`} onConfirm={() => handleClickDeleteCard(id)}>
+        render: (_, { id }) => (<Popconfirm title={`This will delete the card. Are you sure?`} onConfirm={() => handleClickDeleteCard(billingId, id)}>
           <a style={{ color: "red" }}>Delete</a>
         </Popconfirm>)
       }
@@ -89,7 +89,7 @@ const BillingAccounts = () => {
 
     return (
       <div>
-        <h3 style={{ display: "flex", justifyContent: "space-between" }}>Cards <Button type="primary" ghost onClick={handleClickAddCard}>Add a card</Button></h3>
+        <h3 style={{ display: "flex", justifyContent: "space-between" }}>Cards <Button type="primary" ghost onClick={() => handleClickAddCard(billingId)}>Add a card</Button></h3>
         <Table columns={cardsColumn} dataSource={cards} pagination={false} bordered style={{ marginTop: 16 }} rowKey="id" />
       </div>
     );

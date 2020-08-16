@@ -62,7 +62,7 @@ class Licenses {
           }
 
           console.log("Error creating subscription", error)
-          reject(message)
+          reject(`Subscription status: ${subscriptionStatus}, Payment intent status: ${payment_intent.status}`)
         })
         .catch(ex => reject(ex))
     })

@@ -6,12 +6,13 @@ import ProjectPageLayout, { InnerTopBar, Content } from '../../components/projec
 import AddCardDetails from "../../components/billing-accounts/AddCardDetails";
 import { Row, Col } from 'antd';
 import { incrementPendingRequests, decrementPendingRequests, notify } from '../../utils';
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useParams, useLocation } from 'react-router';
 import { addCard } from '../../operations/billingAccount';
 
 const AddCard = () => {
   const history = useHistory()
   const { billingId } = useParams()
+  const { state } = useLocation()
 
   useEffect(() => {
     ReactGA.pageview('/billing/billing-accounts/add-card');
@@ -23,6 +24,9 @@ const AddCard = () => {
       .then(() => {
         notify("success", "Success", "Added card successfully")
         history.goBack()
+        if (state && state.openerBillingId) {
+          history.push(`/billing/${state.openerBillingId}/billing-accounts`)
+        }
       })
       .catch((ex) => notify("error", "Error adding card details", ex))
       .finally(() => decrementPendingRequests())

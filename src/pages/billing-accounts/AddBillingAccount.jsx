@@ -7,10 +7,11 @@ import AddBillingDetails from '../../components/billing-accounts/AddBillingDetai
 import { Row, Col } from 'antd';
 import { incrementPendingRequests, decrementPendingRequests, notify } from '../../utils';
 import { addBillingAccount } from '../../operations/billingAccount';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 
 const AddBillingAccount = () => {
   const history = useHistory()
+  const { state } = useLocation()
 
   useEffect(() => {
     ReactGA.pageview('/billing/billing-accounts/add-account');
@@ -24,8 +25,9 @@ const AddBillingAccount = () => {
         if (!cardConfirmed) {
           notify("error", "Error attaching card to your billing account", error, 15)
         }
-
-        history.goBack()
+        if (state && state.openerBillingId) {
+          history.push(`/billing/${state.openerBillingId}/billing-accounts`)
+        }
       })
       .catch((ex) => notify("error", "Error adding billing account", ex))
       .finally(() => decrementPendingRequests())

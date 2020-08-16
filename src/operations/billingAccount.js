@@ -34,20 +34,39 @@ export function addBillingAccount(stripeClient, cardElement, billingAccountName,
         })
           .then(result => {
             if (result.error) {
-              resolve({ billingId, cardConfirmed: false, error: result.error })
+              resolve({ billingId, cardConfirmed: false, error: result.error.message })
               return
             }
 
-            // Add the billing account to the profile, so that it can be seen in the topbar
-            // Note the billing account we are adding here is not the entire info of that billing account.
-            // Its just so that we know what all billing accounts are there with the user.
-            addBillingAccountToProfile(billingId, billingAccountName)
+            const { client_secret: paymentIntentSecret, status: setupIntentStatus } = result.setupIntent
+            const ack = setupIntentStatus === "succeeded"
+            const requiresAction = setupIntentStatus === "requires_action"
 
-            resolve({ billingId, cardConfirmed: true })
+            if (ack) {
+              addBillingAccountToProfile(billingId, billingAccountName)
+              resolve({ billingId, cardConfirmed: true })
+              loadBillingAccounts()
+              return
+            }
 
-            // Load billing accounts in background so that we can have the info of this newly added credit card in the UI
-            // This method fetches the entire info of all the billing accounts along with the credit cards associated with each billing account
-            loadBillingAccounts()
+            if (requiresAction) {
+
+              stripeClient.confirmCardPayment(paymentIntentSecret)
+                .then(result => {
+                  if (result.error) {
+                    resolve({ billingId, cardConfirmed: false, error: result.error })
+                    return
+                  }
+
+                  addBillingAccountToProfile(billingId, billingAccountName)
+                  resolve({ billingId, cardConfirmed: true })
+                  loadBillingAccounts()
+                })
+                .catch(ex => reject(ex))
+              return
+            }
+
+            resolve({ billingId, cardConfirmed: false, error: `Status: ${setupIntentStatus}` })
           })
           .catch(ex => resolve({ cardConfirmed: false, error: ex.toString() }))
       })
@@ -72,16 +91,46 @@ export function addCard(billingId, stripeClient, cardElement) {
         })
           .then(result => {
             if (result.error) {
-              reject(reject.error)
+              reject(result.error.message)
               return
             }
 
-            // Load billing accounts so that we can have the info of this newly added credit card in the UI
-            loadBillingAccounts()
-              .then(() => resolve())
-              .catch(ex => resolve(ex))
+            const { client_secret: paymentIntentSecret, status: setupIntentStatus } = result.setupIntent
+            const ack = setupIntentStatus === "succeeded"
+            const requiresAction = setupIntentStatus === "requires_action"
+
+            if (ack) {
+              // Load billing accounts so that we can have the info of this newly added credit card in the UI
+              loadBillingAccounts()
+                .then(() => resolve())
+                .catch(ex => resolve(ex))
+              return
+            }
+
+            if (requiresAction) {
+
+              stripeClient.confirmCardPayment(paymentIntentSecret)
+                .then(result => {
+                  if (result.error) {
+                    reject(result.error)
+                    return
+                  }
+
+                  loadBillingAccounts()
+                    .then(() => resolve())
+                    .catch(ex => resolve(ex))
+                })
+                .catch(ex => reject(ex))
+              return
+            }
+
+            reject(`Status: ${setupIntentStatus}`)
+
           })
-          .catch(ex => reject(ex))
+          .catch(ex => {
+            reject(ex)
+            console.log("Got a catch while adding card", ex)
+          })
       })
       .catch(error => reject(error))
   })

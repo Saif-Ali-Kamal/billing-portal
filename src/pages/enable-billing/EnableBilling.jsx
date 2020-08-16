@@ -8,16 +8,13 @@ import { useSelector } from 'react-redux';
 import { isEmailVerified, isBillingEnabled, verifyEmail, resendEmailVerificationCode, getProfile } from '../../operations/userManagement';
 import { openBillingAccount, incrementPendingRequests, notify, decrementPendingRequests } from '../../utils';
 import { addBillingAccount } from '../../operations/billingAccount';
-import { useHistory } from 'react-router';
 import { useEffect } from 'react';
 const { Step } = Steps;
 
 const EnableBilling = () => {
 
-  const history = useHistory();
-
   // Global state
-  const { email } = useSelector(state => getProfile(state))
+  const { encrypted_email } = useSelector(state => getProfile(state))
   const emailVerified = useSelector(state => isEmailVerified(state))
   const billingEnabled = useSelector(state => isBillingEnabled(state))
   const initialStep = emailVerified ? 1 : 0
@@ -68,7 +65,7 @@ const EnableBilling = () => {
       content: <React.Fragment>
         <Row>
           <Col lg={{ span: 8, offset: 8 }}>
-            <VerifyAccount email={email} handleSubmit={handleVerify} handleResendVerificationCode={handleResendVerificationCode} />
+            <VerifyAccount email={encrypted_email} handleSubmit={handleVerify} handleResendVerificationCode={handleResendVerificationCode} />
           </Col>
         </Row>
       </React.Fragment>

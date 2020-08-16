@@ -38,7 +38,7 @@ function graphQLAPIHandler(request, schema) {
     case "billing_details":
       return { data: { billing_details: { status: 200, result: { country: "IN", card_number: "4078", card_type: "visa", card_expiry_date: "8/25", amount: 2500 } } } }
     case "plans":
-      return { data: { plans: [{ product: { name: "Space Cloud - Starter Plan" }, amount: 2500, currency: "usd", quotas: { maxDatabases: 3, maxProjects: 1 } }] } }
+      return { data: { plans: [{ product: { name: "Space Cloud - Starter Plan" }, amount: 2500, currency: "usd", meta: { maxDatabases: 3, maxProjects: 1 } }] } }
     case "invoices":
       const invoices = [
         { id: "1", number: "inv_1234", status: "paid", amount: 2500, currency: "usd", period: { start: 1589081001203, end: 1589081001203 } }

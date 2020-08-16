@@ -2,10 +2,10 @@ import React from 'react';
 import { Modal } from 'antd';
 import { Card } from 'antd';
 
-const QuotasModal = ({ handleCancel, quotas }) => {
-  const maxClusters = quotas && quotas.maxClusters ? quotas.maxClusters : 1
-  const maxProjects = quotas && quotas.maxProjects ? quotas.maxProjects : 1
-  const maxDatabases = quotas && quotas.maxDatabases ? quotas.maxDatabases : 1
+const QuotasModal = ({ handleCancel, meta }) => {
+  const maxClusters = meta && meta.maxClusters ? meta.maxClusters : 1
+  const maxProjects = meta && meta.maxProjects ? meta.maxProjects : 1
+  const maxDatabases = meta && meta.maxDatabases ? meta.maxDatabases : 1
   return (
     <Modal
       title='License quotas'
