@@ -13,6 +13,11 @@ to = "/manifest.json"
 status = 200
 
 [[redirects]]
+from = "/logo.png"
+to = "/logo.png"
+status = 200
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
