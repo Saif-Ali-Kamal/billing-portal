@@ -21,7 +21,7 @@ const SubscriptionDetail = ({ handleSuccess, creditCards = [], planDetails = { m
     <Card style={{ boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)', borderRadius: '10px', padding: '24px' }}>
       <p><b>Subscription details</b></p>
       <Card title={<p style={{ fontSize: "18px" }}>{planDetails.name} Plan</p>} extra={<p style={{ fontSize: "18px" }}><span style={{ color: "#34A853" }}>{planDetails.currency}{planDetails.amount}</span>/month</p>}>
-        <p><b>Total Clusters</b>: {planDetails.meta.maxClusters}</p>
+        <p><b>Total Licenses</b>: {planDetails.licenses_count}</p>
         <p><b>Total Projects</b>: {planDetails.meta.maxProjects}</p>
         <p><b>Total Databases</b>: {planDetails.meta.maxDatabases} per project</p>
       </Card>

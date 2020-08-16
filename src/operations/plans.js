@@ -36,7 +36,8 @@ export function getPlans(state, billingId) {
       amount: obj.amount / 100,
       currency: getCurrencyNotation(obj.currency),
       meta: product.meta,
-      details: product.details
+      details: product.details,
+      licenses_count: product.licenses_count
     }
   })
   return result

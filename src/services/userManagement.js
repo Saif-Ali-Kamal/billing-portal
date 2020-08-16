@@ -118,7 +118,12 @@ class UserManagement {
             return
           }
 
-          resolve(result && result.length > 0 ? result[0] : {})
+          if (result && result.length > 0 && result[0]) {
+            resolve(result[0])
+            return
+          }
+
+          reject("No profile received")
         })
         .catch(ex => reject(ex))
     })
