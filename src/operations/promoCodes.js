@@ -18,9 +18,9 @@ export function applyPromoCode(billingId, promoCode) {
     client.promoCodes.applyPromotionCodeToCustomer(billingId, promoCode)
       .then((amount) => {
         const promoCodeDetails = {
-          promotionCode: promoCode,
-          amount: amount,
-          applied_on: new Date()
+          promotion_id: promoCode,
+          promotions: [{ amount: amount }],
+          time_stamp: new Date()
         }
 
         const promoCodes = getPromoCodes(store.getState())
