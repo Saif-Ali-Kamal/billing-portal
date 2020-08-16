@@ -26,7 +26,7 @@ class Plans {
           if (!plans) plans = []
           if (!billing_plan_mapping) billing_plan_mapping = []
 
-          const totalPlans = [...plans, ...billing_plan_mapping]
+          const totalPlans = [...plans, ...billing_plan_mapping.map(obj => obj.plans[0])]
           resolve(totalPlans)
         })
         .catch(ex => reject(ex))
