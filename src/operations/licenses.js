@@ -102,5 +102,5 @@ export const getLicenseKeySecret = (state, licenseId, licenseKey) => {
 
 export const getLicenseQuotas = (state, licenseId) => {
   const license = getLicense(state, licenseId)
-  return get(license, "products.0.meta", [{}])
+  return get(license, "products.0", {})
 }

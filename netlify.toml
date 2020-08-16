@@ -13,8 +13,23 @@ to = "/manifest.json"
 status = 200
 
 [[redirects]]
+from = "/asset-manifest.json"
+to = "/asset-manifest.json"
+status = 200
+
+[[redirects]]
 from = "/logo.png"
 to = "/logo.png"
+status = 200
+
+[[redirects]]
+from = "/favicon.ico"
+to = "/favicon.ico"
+status = 200
+
+[[redirects]]
+from = "/service-worker.js"
+to = "/service-worker.js"
 status = 200
 
 [[redirects]]

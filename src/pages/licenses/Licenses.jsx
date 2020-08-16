@@ -216,7 +216,8 @@ const Licenses = () => {
             licenseSecret={selectedLicenseKeySecret} />}
           {quotasModalVisible && <QuotasModal
             handleCancel={handleQuotasModalCancel}
-            quotas={selectedLicenseQuotas} />}
+            meta={selectedLicenseQuotas.meta}
+            licensesCount={selectedLicenseQuotas.licenses_count} />}
         </Content>
       </ProjectPageLayout>
     </React.Fragment>
