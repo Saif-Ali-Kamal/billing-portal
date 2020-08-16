@@ -85,6 +85,7 @@ export function openBillingAccount(billingId) {
     billingId = billingAccounts[0].id
   }
 
+  store.dispatch(set("invoices", []))
   history.push(`/billing/${billingId}`)
 }
 

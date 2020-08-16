@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ReactGA from 'react-ga';
-import { Row, Col, Button, Table, Popconfirm } from 'antd';
+import { Row, Col, Button, Table, Popconfirm, Tooltip } from 'antd';
 import { useHistory, useParams } from 'react-router';
 import Sidenav from '../../components/sidenav/Sidenav';
 import Topbar from '../../components/topbar/Topbar';
@@ -92,7 +92,7 @@ const Licenses = () => {
       .finally(() => decrementPendingRequests())
   }
 
-  const expandedRowRender = ({ id, license_key_mapping = [] }) => {
+  const expandedRowRender = ({ id, status, license_key_mapping = [] }) => {
     const licenseKeyColumn = [
       {
         title: 'Key',
@@ -110,7 +110,9 @@ const Licenses = () => {
         key: 'action',
         render: (_, { key, meta }) => (
           <React.Fragment>
-            <a style={{ marginRight: 16 }} onClick={() => handleApplykey(id, key)}>Apply license key</a>
+            <Tooltip title={status === "deactivated" ? "Cannot apply a deactivated license key" : ""}>
+              <Button type="link" disabled={status === "deactivated"} style={{ marginRight: 16 }} onClick={() => handleApplykey(id, key)}>Apply license key</Button>
+            </Tooltip>
             {meta && meta.clusterName && (
               <Popconfirm title={`This will downgrade the associated cluster to Opensource plan. Are you sure?`} onConfirm={() => handleClickRevokeLicenseKey(id, key)}>
                 <a style={{ color: "red" }}>Revoke</a>
