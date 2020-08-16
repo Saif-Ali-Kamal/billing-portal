@@ -23,7 +23,6 @@ const AddCard = () => {
     addCard(billingId, stripeClient, cardElement)
       .then(() => {
         notify("success", "Success", "Added card successfully")
-        history.goBack()
         if (state && state.openerBillingId) {
           history.push(`/billing/${state.openerBillingId}/billing-accounts`)
         }
