@@ -65,7 +65,11 @@ const BillingAccounts = () => {
     },
     {
       title: 'Balance Credit',
-      render: (_, { balance }) => `$${balance * -1 / 100}` // Balance fetched from backend is negative
+      
+      render: (_, { balance, country }) => {
+        const currencyNotation = country === "IN" ? "₹" : "$"
+        return `${currencyNotation} ${balance * -1 / 100}` // Balance fetched from backend is negative
+      }
     }
   ]
 
