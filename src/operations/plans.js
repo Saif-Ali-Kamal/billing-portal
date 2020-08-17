@@ -1,7 +1,7 @@
 import client from '../client';
 import store from '../store';
 import { set, get } from 'automate-redux';
-import { countryPlanSuffixMapping } from '../constant';
+import { countryPlanSuffixMapping, getCurrencyByCountryCode } from '../constant';
 import { getBillingAccountCountry } from './billingAccount';
 import { getCurrencyNotation } from '../utils';
 
@@ -24,15 +24,14 @@ function setPlans(plans) {
 export function getPlans(state, billingId) {
   const billingAccountCountryCode = getBillingAccountCountry(state, billingId)
   const plans = get(state, "plans", [])
+  const currency = getCurrencyByCountryCode(billingAccountCountryCode)
   const countrySuffix = countryPlanSuffixMapping[billingAccountCountryCode] ? countryPlanSuffixMapping[billingAccountCountryCode] : ""
-  const planSuffix = countrySuffix ? "monthly-" + countrySuffix : "monthly"
-  const filteredPlans = plans.filter(obj => obj.id.endsWith(planSuffix))
+  const filteredPlans = plans.filter(obj => obj.currency === currency && obj.interval === "month")
   const result = filteredPlans.map(obj => {
     const product = obj.products[0]
-    const name = product.name.replace("Space Cloud - ", "").replace(" Plan", "")
     return {
       id: countrySuffix ? obj.id.replace(`-${countrySuffix}`, "") : obj.id,
-      name: name,
+      name: obj.type,
       amount: obj.amount / 100,
       currency: getCurrencyNotation(obj.currency),
       meta: product.meta,

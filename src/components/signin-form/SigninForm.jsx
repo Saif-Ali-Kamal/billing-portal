@@ -26,7 +26,7 @@ const SigninForm = (props) => {
       </Card>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <p style={{ color: 'rgba(255, 255, 255, 0.6)' }}>Need an account?
-          <a style={{ color: '#ffffff' }} href="/signup">Signup</a>
+          <a style={{ color: '#ffffff' }} href="/signup"> Signup</a>
         </p>
         <a style={{ color: '#ffffff' }} href="/forget-password" >Forget password?</a>
       </div>

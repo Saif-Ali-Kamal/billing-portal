@@ -9,6 +9,8 @@ import TableExpandIcon from "../../components/table-expand-icon/TableExpandIcon"
 import { useSelector } from 'react-redux';
 import { getBillingAccounts, removeCard, setDefaultCard } from '../../operations/billingAccount';
 import { capitalizeFirstCharacter, incrementPendingRequests, notify, decrementPendingRequests } from '../../utils';
+import countries from "../../components/billing-accounts/countries.json"
+
 
 const BillingAccounts = () => {
   useEffect(() => {
@@ -53,6 +55,13 @@ const BillingAccounts = () => {
       title: 'Name',
       key: 'name',
       dataIndex: 'name'
+    },
+    {
+      title: 'Country',
+      render: (_, { country }) => {
+        const countryInfo = countries.find(obj => obj.code === country)
+        return countryInfo ? countryInfo.name : ""
+      }
     },
     {
       title: 'Balance Credit',

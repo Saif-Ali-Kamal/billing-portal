@@ -21,6 +21,10 @@ export const countryPlanSuffixMapping = {
   "IN": "inr"
 }
 
+export const getCurrencyByCountryCode = (countryCode) => {
+  return countryPlanSuffixMapping[countryCode] ? countryPlanSuffixMapping[countryCode] : "usd"
+}
+
 const getURL = (productionURL, developmentURL, mockURL) => {
   if (process.env.NODE_ENV === "production") {
     return productionURL
