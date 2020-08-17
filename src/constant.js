@@ -1,4 +1,4 @@
-export const stripeKey = "pk_test_86Z4cMrqx8qC7bHLa0nLeQYs00D1MqsudX"
+export const stripeKey = "pk_live_Lq674TgqtTSAxQSdVZOZDn9300jIWrJyoh"
 // export const plans = [
 //   {
 //     id: "space-cloud-pro--monthly",
