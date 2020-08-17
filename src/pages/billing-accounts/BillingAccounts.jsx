@@ -72,7 +72,7 @@ const BillingAccounts = () => {
       },
       {
         title: 'Default card',
-        render: (_, { isDefault, id }) => <Radio checked={isDefault} onChange={() => handleClickSetDefaultCard(id)} />
+        render: (_, { isDefault, id }) => <Radio checked={isDefault} onChange={() => handleClickSetDefaultCard(billingId, id)} />
       },
       {
         title: 'Card expiry',
