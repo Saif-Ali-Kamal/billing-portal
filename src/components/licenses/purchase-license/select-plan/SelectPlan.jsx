@@ -14,7 +14,7 @@ function FlexContainer({ children }) {
 
 export default function SelectPlan({ plans, handleSelectPlan, handleContactUs }) {
   return (
-    <Row className="select-plan" gutter={[48, 48]} >
+    <Row className="select-plan" gutter={[48, 48]} justify="center" >
       {plans.map(({ id, name, amount, currency, details }) => (
         <Col lg={{ span: 12 }} xl={{ span: 8 }}>
           <Card className="select-plan-card blue-card">

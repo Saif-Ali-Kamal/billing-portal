@@ -14,6 +14,11 @@ class Licenses {
         variables: { billingId }
       })
         .then(res => {
+          if (res.errors && res.errors.length > 0) {
+            reject(res.errors[0].message)
+            return
+          }
+          
           const { status, error, message, result } = res.data.getLicenses
           if (status !== 200) {
             reject(message)
@@ -42,6 +47,11 @@ class Licenses {
         variables: { billingId, plans, cardId }
       })
         .then(res => {
+          if (res.errors && res.errors.length > 0) {
+            reject(res.errors[0].message)
+            return
+          }
+
           const { status, error, message, result } = res.data.createSubscription
           if (status !== 200) {
             reject(message)
@@ -82,6 +92,11 @@ class Licenses {
         variables: { billingId, licenses }
       })
         .then(res => {
+          if (res.errors && res.errors.length > 0) {
+            reject(res.errors[0].message)
+            return
+          }
+
           const { status, error, message } = res.data.deactivateLicense
           if (status !== 200) {
             reject(message)
@@ -109,6 +124,11 @@ class Licenses {
         variables: { billingId, licenses }
       })
         .then(res => {
+          if (res.errors && res.errors.length > 0) {
+            reject(res.errors[0].message)
+            return
+          }
+
           const { status, error, message } = res.data.renewLicense
           if (status !== 200) {
             reject(message)
@@ -136,6 +156,11 @@ class Licenses {
         variables: { billingId, licenseId, licenseKey }
       })
         .then(res => {
+          if (res.errors && res.errors.length > 0) {
+            reject(res.errors[0].message)
+            return
+          }
+
           const { status, error, message } = res.data.removeLicenseKey
           if (status !== 200) {
             reject(message)

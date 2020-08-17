@@ -48,14 +48,12 @@ const Invoices = () => {
       key: "number"
     },
     {
-      title: "Period",
-      dataIndex: "period",
-      key: "period",
+      title: "Date of issue",
+      dataIndex: "dateOfIssue",
+      key: "dateOfIssue",
       render: (_, record) => {
-        var start = new Date(record.period.start * 1000)
-        var end = new Date(record.period.end * 1000)
-        return `${start.getDate()}/${start.getMonth() + 1}/${start.getFullYear()} to 
-          ${end.getDate()}/${end.getMonth() + 1}/${end.getFullYear()}`
+        var date = new Date(record.dateOfIssue * 1000)
+        return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
       }
     },
     {

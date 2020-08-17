@@ -85,8 +85,31 @@ export function openBillingAccount(billingId) {
     billingId = billingAccounts[0].id
   }
 
+  const pathName = window.location.pathname
+  const pathArray = pathName.split("/")
+  const currentSelectedBillingId = pathArray[2]
+
+  // Return if the billing id to be opened is already opened
+  if (billingId === currentSelectedBillingId) {
+    return
+  }
+
   store.dispatch(set("invoices", []))
-  history.push(`/billing/${billingId}`)
+
+  // Form the new path to be opened.
+  // This path should have the same url with the the only billing id changed if the previous path was a billing path.
+  // Or else this path should just open the home page of a billing account
+  const isCurrentPathABillingPath = pathName.startsWith("/billing")
+  let newPath = `/billing/${billingId}`
+  if (isCurrentPathABillingPath) {
+    pathArray[2] = billingId
+    newPath = pathArray.join("/")
+  }
+  
+  history.push(newPath)
+
+  // Save the billing id in local storage 
+  setLastOpenedBillingAccount(billingId)
 }
 
 export function performOnTokenActions() {

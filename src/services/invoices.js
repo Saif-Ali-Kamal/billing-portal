@@ -19,6 +19,11 @@ class Invoices {
         variables: { billingId, startingAfter }
       })
         .then(res => {
+          if (res.errors && res.errors.length > 0) {
+            reject(res.errors[0].message)
+            return
+          }
+          
           const { status, error, message, result } = res.data.invoices
           if (status !== 200) {
             reject(message)

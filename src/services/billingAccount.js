@@ -19,6 +19,11 @@ class BillingAccount {
         variables: { name, billingName, address }
       })
         .then(res => {
+          if (res.errors && res.errors.length > 0) {
+            reject(res.errors[0].message)
+            return
+          }
+
           const { status, error, message, result } = res.data.addBillingAccount
           if (status !== 200) {
             reject(message)
@@ -41,6 +46,11 @@ class BillingAccount {
         variables: {}
       })
         .then(res => {
+          if (res.errors && res.errors.length > 0) {
+            reject(res.errors[0].message)
+            return
+          }
+
           const { status, error, message, result } = res.data.getBillingAccounts
           if (status !== 200) {
             reject(message)
@@ -68,6 +78,11 @@ class BillingAccount {
         variables: { billingId }
       })
         .then(res => {
+          if (res.errors && res.errors.length > 0) {
+            reject(res.errors[0].message)
+            return
+          }
+          
           const { status, error, message, result } = res.data.addCard
           if (status !== 200) {
             reject(message)
@@ -94,6 +109,11 @@ class BillingAccount {
         variables: { billingId, cardId }
       })
         .then(res => {
+          if (res.errors && res.errors.length > 0) {
+            reject(res.errors[0].message)
+            return
+          }
+
           const { status, error, message } = res.data.removeCard
           if (status !== 200) {
             reject(message)
@@ -120,6 +140,11 @@ class BillingAccount {
         variables: { billingId, cardId }
       })
         .then(res => {
+          if (res.errors && res.errors.length > 0) {
+            reject(res.errors[0].message)
+            return
+          }
+          
           const { status, error, message } = res.data.setDefaultCard
           if (status !== 200) {
             reject(message)

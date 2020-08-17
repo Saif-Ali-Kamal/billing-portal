@@ -42,6 +42,11 @@ class UserManagement {
         variables: { name, organizationName, email, password, sourceIp, countryCode }
       })
         .then(res => {
+          if (res.errors && res.errors.length > 0) {
+            reject(res.errors[0].message)
+            return
+          }
+          
           const { status, error, message, result } = res.data.signUp
           if (status !== 200) {
             reject(message)
@@ -77,6 +82,11 @@ class UserManagement {
         variables: { email, password }
       })
         .then(res => {
+          if (res.errors && res.errors.length > 0) {
+            reject(res.errors[0].message)
+            return
+          }
+
           const { status, error, message, result } = res.data.signIn
           if (status !== 200) {
             reject(message)
@@ -111,6 +121,7 @@ class UserManagement {
             reject(res.errors[0].message)
             return
           }
+
           const { status, error, message, result } = res.data.fetchProfile
           if (status !== 200) {
             reject(message)
@@ -143,6 +154,11 @@ class UserManagement {
         variables: { email }
       })
         .then(res => {
+          if (res.errors && res.errors.length > 0) {
+            reject(res.errors[0].message)
+            return
+          }
+
           const { status, error, message } = res.data.forgotPassGenerateCode
           if (status !== 200) {
             reject(message)
@@ -170,6 +186,11 @@ class UserManagement {
         variables: { code, password }
       })
         .then(res => {
+          if (res.errors && res.errors.length > 0) {
+            reject(res.errors[0].message)
+            return
+          }
+
           const { status, error, message } = res.data.forgotPassVerifyCode
           if (status !== 200) {
             reject(message)
@@ -197,6 +218,11 @@ class UserManagement {
         variables: { oldPassword, newPassword }
       })
         .then(res => {
+          if (res.errors && res.errors.length > 0) {
+            reject(res.errors[0].message)
+            return
+          }
+
           const { status, error, message } = res.data.changePassword
           if (status !== 200) {
             reject(message)
@@ -225,6 +251,11 @@ class UserManagement {
         variables: { code }
       })
         .then(res => {
+          if (res.errors && res.errors.length > 0) {
+            reject(res.errors[0].message)
+            return
+          }
+
           const { status, error, message, result } = res.data.verifyEmail
           if (status !== 200) {
             reject(message)
@@ -252,6 +283,11 @@ class UserManagement {
         variables: {}
       })
         .then(res => {
+          if (res.errors && res.errors.length > 0) {
+            reject(res.errors[0].message)
+            return
+          }
+
           const { status, error, message } = res.data.resendVerificatIonEmail
           if (status !== 200) {
             reject(message)
