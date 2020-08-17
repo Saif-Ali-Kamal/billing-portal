@@ -12,6 +12,7 @@ import { useHistory, useLocation } from 'react-router';
 const AddBillingAccount = () => {
   const history = useHistory()
   const { state } = useLocation()
+  const previousPath = state && state.from ? state.from : undefined
 
   useEffect(() => {
     ReactGA.pageview('/billing/billing-accounts/add-account');
@@ -25,8 +26,8 @@ const AddBillingAccount = () => {
         if (!cardConfirmed) {
           notify("error", "Error attaching card to your billing account", error, 15)
         }
-        if (state && state.openerBillingId) {
-          history.push(`/billing/${state.openerBillingId}/billing-accounts`)
+        if (previousPath) {
+          history.push(previousPath)
         }
       })
       .catch((ex) => notify("error", "Error adding billing account", ex))
@@ -38,7 +39,7 @@ const AddBillingAccount = () => {
       <Topbar showBillingSelector />
       <Sidenav selectedItem='billing-accounts' />
       <ProjectPageLayout>
-        <InnerTopBar title="Add a billing account" />
+        <InnerTopBar title="Add a billing account" previousPath={previousPath} />
         <Content>
           <Row>
             <Col lg={{ span: 12, offset: 6 }}>

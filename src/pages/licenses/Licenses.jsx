@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ReactGA from 'react-ga';
 import { Row, Col, Button, Table, Popconfirm, Tooltip } from 'antd';
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useParams, useLocation } from 'react-router';
 import Sidenav from '../../components/sidenav/Sidenav';
 import Topbar from '../../components/topbar/Topbar';
 import ProjectPageLayout, { Content } from '../../components/project-page-layout/ProjectPageLayout';
@@ -16,6 +16,7 @@ import TableExpandIcon from "../../components/table-expand-icon/TableExpandIcon"
 const Licenses = () => {
   const history = useHistory();
   const { billingId } = useParams();
+  const { pathname } = useLocation()
 
   useEffect(() => {
     ReactGA.pageview("/billing/licenses");
@@ -65,7 +66,7 @@ const Licenses = () => {
   }
 
   const handlePurchaseClick = () => {
-    history.push(`/billing/${billingId}/licenses/purchase`)
+    history.push(`/billing/${billingId}/licenses/purchase`, { from: pathname })
   }
 
   const handleClickRenew = (licenseId) => {

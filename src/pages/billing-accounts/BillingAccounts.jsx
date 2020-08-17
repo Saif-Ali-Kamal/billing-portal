@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Button, Table, Radio, Popconfirm } from 'antd';
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useParams, useLocation } from 'react-router';
 import ReactGA from 'react-ga';
 import Topbar from '../../components/topbar/Topbar';
 import Sidenav from '../../components/sidenav/Sidenav';
@@ -16,15 +16,16 @@ const BillingAccounts = () => {
   }, [])
 
   const history = useHistory();
+  const { pathname } = useLocation()
   const { billingId } = useParams()
 
   // Global state
   const billingAccounts = useSelector(state => getBillingAccounts(state))
 
   // Handlers
-  const handleClickAddCard = (targetBillingId) => history.push(`/billing/${targetBillingId}/billing-accounts/add-card`, { openerBillingId: billingId })
+  const handleClickAddCard = (targetBillingId) => history.push(`/billing/${targetBillingId}/billing-accounts/add-card`, { from: pathname })
 
-  const handleClickAddBillingAccount = () => history.push(`/billing/${billingId}/billing-accounts/add-account`,  { openerBillingId: billingId })
+  const handleClickAddBillingAccount = () => history.push(`/billing/${billingId}/billing-accounts/add-account`, { from: pathname })
 
   const handleClickDeleteCard = (billingId, cardId) => {
     incrementPendingRequests()

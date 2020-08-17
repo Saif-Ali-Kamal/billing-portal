@@ -13,6 +13,7 @@ const AddCard = () => {
   const history = useHistory()
   const { billingId } = useParams()
   const { state } = useLocation()
+  const previousPath = state && state.from ? state.from : undefined
 
   useEffect(() => {
     ReactGA.pageview('/billing/billing-accounts/add-card');
@@ -23,8 +24,8 @@ const AddCard = () => {
     addCard(billingId, stripeClient, cardElement)
       .then(() => {
         notify("success", "Success", "Added card successfully")
-        if (state && state.openerBillingId) {
-          history.push(`/billing/${state.openerBillingId}/billing-accounts`)
+        if (previousPath) {
+          history.push(previousPath)
         }
       })
       .catch((ex) => notify("error", "Error adding card details", ex))
@@ -36,10 +37,10 @@ const AddCard = () => {
       <Topbar showBillingSelector />
       <Sidenav selectedItem='billing-accounts' />
       <ProjectPageLayout>
-        <InnerTopBar title="Add a card" />
+        <InnerTopBar title="Add a card" previousPath={previousPath} />
         <Content>
           <Row>
-            <Col lg={{ span: 8, offset: 8 }}>
+            <Col lg={{ span: 12, offset: 6 }}>
               <AddCardDetails handleSubmit={handleAddCardDetails} />
             </Col>
           </Row>

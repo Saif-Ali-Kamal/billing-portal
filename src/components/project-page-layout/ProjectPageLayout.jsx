@@ -20,11 +20,19 @@ export function Content({ children }) {
   )
 }
 
-export function InnerTopBar({ title }) {
+export function InnerTopBar({ title, previousPath }) {
   const history = useHistory();
+  const goBack = () => {
+    if (previousPath) {
+      history.push(previousPath)
+      return
+    }
+    history.goBack()
+  }
+
   return (
     <div className="project-page-inner-topbar">
-      <Button type="link" className="go-back-button" onClick={history.goBack}><LeftOutlined />Go back</Button>
+      <Button type="link" className="go-back-button" onClick={goBack}><LeftOutlined />Go back</Button>
       <span className="title">{title}</span>
     </div>
   )
