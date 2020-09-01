@@ -21,7 +21,11 @@ export function addBillingAccount(stripeClient, cardElement, billingAccountName,
 
     client.billingAccount.addBillingAccount(name, billingAccountName, address)
       .then((result) => {
+
         const { clientSecret, billingId } = result
+
+        // Add the billing account to the profile in redux, so that it can be displayed in account selector in topbar
+        addBillingAccountToProfile(billingId, billingAccountName)
         stripeClient.confirmCardSetup(clientSecret, {
           payment_method: {
             card: cardElement,
@@ -43,7 +47,6 @@ export function addBillingAccount(stripeClient, cardElement, billingAccountName,
             const requiresAction = setupIntentStatus === "requires_action"
 
             if (ack) {
-              addBillingAccountToProfile(billingId, billingAccountName)
               resolve({ billingId, cardConfirmed: true })
               loadBillingAccounts()
               return
@@ -58,7 +61,6 @@ export function addBillingAccount(stripeClient, cardElement, billingAccountName,
                     return
                   }
 
-                  addBillingAccountToProfile(billingId, billingAccountName)
                   resolve({ billingId, cardConfirmed: true })
                   loadBillingAccounts()
                 })
@@ -68,7 +70,7 @@ export function addBillingAccount(stripeClient, cardElement, billingAccountName,
 
             resolve({ billingId, cardConfirmed: false, error: `Status: ${setupIntentStatus}` })
           })
-          .catch(ex => resolve({ cardConfirmed: false, error: ex.toString() }))
+          .catch(ex => resolve({ billingId, cardConfirmed: false, error: ex.toString() }))
       })
       .catch(error => reject(error))
   });

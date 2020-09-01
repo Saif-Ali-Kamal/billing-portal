@@ -79,12 +79,19 @@ export function openBillingAccount(billingId) {
 
   const billingAccounts = getProfileBillingAccounts(store.getState())
 
-  // Use the first billing account from the profile if no billing id specified
-  // or if the specified billing id is no more present in the user's profile
-  if (!billingId || billingAccounts.findIndex(obj => obj.id === billingId) === -1) {
-    billingId = billingAccounts[0].id
-  }
+  if (!billingId) {
+    // Return if no billing accounts present in the profile
+    if (!billingAccounts || !billingAccounts.length) {
+      return
+    }
 
+    // Use the first billing account from the profile if no billing id specified
+    // or if the specified billing id is no more present in the user's profile
+    if (billingAccounts.findIndex(obj => obj.id === billingId) === -1) {
+      billingId = billingAccounts[0].id
+    }
+  }
+  
   const pathName = window.location.pathname
   const pathArray = pathName.split("/")
   const currentSelectedBillingId = pathArray[2]
@@ -105,7 +112,7 @@ export function openBillingAccount(billingId) {
     pathArray[2] = billingId
     newPath = pathArray.join("/")
   }
-  
+
   history.push(newPath)
 
   // Save the billing id in local storage 

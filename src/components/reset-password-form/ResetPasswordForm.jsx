@@ -21,7 +21,7 @@ const ResetPasswordForm = (props) => {
     }
     cb()
   }
-  
+
   const handleSubmitClick = (values) => {
     props.handleSubmit(values.verificationCode, values.password);
   }
@@ -47,15 +47,15 @@ const ResetPasswordForm = (props) => {
           </Form.Item>
           <Form.Item noStyle shouldUpdate={(preValue, curValue) => preValue.password !== curValue.password}>
             {({ getFieldValue }) => {
-            return(
-               <ul style={{ listStyleType:'none', paddingLeft:0 }}>
-                  <li>{!upperCaseRegex.test(getFieldValue('password')) ? <CloseCircleFilled style={{color:'#FF4D4F', marginRight:'4px'}}/> : <CheckCircleFilled style={{color:'#34A853', marginRight:'4px'}}/>} Atleast one uppercase character</li>
-                  <li>{!lowerCaseRegex.test(getFieldValue('password') ? getFieldValue('password') : '') ? <CloseCircleFilled style={{color:'#FF4D4F', marginRight:'4px'}}/> : <CheckCircleFilled style={{color:'#34A853', marginRight:'4px'}}/>} Atleast one lowercase character</li>
-                  <li>{!digitCaseRegex.test(getFieldValue('password')) ? <CloseCircleFilled style={{color:'#FF4D4F', marginRight:'4px'}}/> : <CheckCircleFilled style={{color:'#34A853', marginRight:'4px'}}/>} Atleast one digit</li>
-                  <li>{!specialCharRegex.test(getFieldValue('password')) ? <CloseCircleFilled style={{color:'#FF4D4F', marginRight:'4px'}}/> : <CheckCircleFilled style={{color:'#34A853', marginRight:'4px'}}/>} Atleast one special character</li>
-                  <li>{!lengthRegex.test(getFieldValue('password') ? getFieldValue('password') : '') ? <CloseCircleFilled style={{color:'#FF4D4F', marginRight:'4px'}}/> : <CheckCircleFilled style={{color:'#34A853', marginRight:'4px'}}/>} 8 characters minimum</li>
+              return (
+                <ul style={{ listStyleType: 'none', paddingLeft: 0 }}>
+                  <li>{!upperCaseRegex.test(getFieldValue('password')) ? <CloseCircleFilled style={{ color: '#FF4D4F', marginRight: '4px' }} /> : <CheckCircleFilled style={{ color: '#34A853', marginRight: '4px' }} />} Atleast one uppercase character</li>
+                  <li>{!lowerCaseRegex.test(getFieldValue('password') ? getFieldValue('password') : '') ? <CloseCircleFilled style={{ color: '#FF4D4F', marginRight: '4px' }} /> : <CheckCircleFilled style={{ color: '#34A853', marginRight: '4px' }} />} Atleast one lowercase character</li>
+                  <li>{!digitCaseRegex.test(getFieldValue('password')) ? <CloseCircleFilled style={{ color: '#FF4D4F', marginRight: '4px' }} /> : <CheckCircleFilled style={{ color: '#34A853', marginRight: '4px' }} />} Atleast one digit</li>
+                  <li>{!specialCharRegex.test(getFieldValue('password')) ? <CloseCircleFilled style={{ color: '#FF4D4F', marginRight: '4px' }} /> : <CheckCircleFilled style={{ color: '#34A853', marginRight: '4px' }} />} Atleast one special character</li>
+                  <li>{!lengthRegex.test(getFieldValue('password') ? getFieldValue('password') : '') ? <CloseCircleFilled style={{ color: '#FF4D4F', marginRight: '4px' }} /> : <CheckCircleFilled style={{ color: '#34A853', marginRight: '4px' }} />} 8 characters minimum</li>
                 </ul>
-                );
+              );
             }}
           </Form.Item>
           <Form.Item style={{ marginTop: 16 }} noStyle>
