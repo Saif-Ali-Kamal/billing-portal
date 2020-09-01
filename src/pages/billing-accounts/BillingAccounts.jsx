@@ -7,7 +7,7 @@ import Sidenav from '../../components/sidenav/Sidenav';
 import ProjectPageLayout, { Content } from '../../components/project-page-layout/ProjectPageLayout';
 import TableExpandIcon from "../../components/table-expand-icon/TableExpandIcon"
 import { useSelector } from 'react-redux';
-import { getBillingAccounts, removeCard, setDefaultCard } from '../../operations/billingAccount';
+import { getBillingAccounts, removeCard, setDefaultCard, loadBillingAccounts } from '../../operations/billingAccount';
 import { capitalizeFirstCharacter, incrementPendingRequests, notify, decrementPendingRequests } from '../../utils';
 import countries from "../../components/billing-accounts/countries.json"
 
@@ -15,6 +15,7 @@ import countries from "../../components/billing-accounts/countries.json"
 const BillingAccounts = () => {
   useEffect(() => {
     ReactGA.pageview("/billing/billing-accounts");
+    loadBillingAccounts()
   }, [])
 
   const history = useHistory();

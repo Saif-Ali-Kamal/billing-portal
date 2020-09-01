@@ -2,16 +2,20 @@ import React from 'react';
 import ResetPasswordForm from '../../components/reset-password-form/ResetPasswordForm';
 import './reset-password.css';
 import { resetPassword, sendForgotPasswordEmail } from '../../operations/userManagement';
-import { useLocation } from 'react-router';
+import { useLocation, useHistory } from 'react-router';
 import { notify, incrementPendingRequests, decrementPendingRequests } from '../../utils';
 
 const ResetPassword = () => {
   const { state } = useLocation()
+  const history = useHistory()
 
   const handleResetPassword = (verificationCode, password) => {
     incrementPendingRequests()
     resetPassword(verificationCode, password)
-      .then(() => notify("success", "Success", "Password resetted successfully. Login with the new password."))
+      .then(() => {
+        notify("success", "Success", "Password resetted successfully. Login with the new password.")
+        history.push('/login')
+      }) 
       .catch(ex => notify('error', 'Error resetting password', ex))
       .finally(() => decrementPendingRequests())
   }

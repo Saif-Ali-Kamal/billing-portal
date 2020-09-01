@@ -22,6 +22,7 @@
     "graphql-tag": "^2.10.4",
     "less": "^3.11.3",
     "less-loader": "^6.1.1",
+    "otp-input-react": "0.2.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-ga": "^3.0.0",
@@ -30,7 +31,7 @@
     "react-redux": "^7.2.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.3",
+    "react-scripts": "^3.4.3",
     "redux": "^4.0.5",
     "space-api": "^0.18.2"
   },
