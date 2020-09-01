@@ -30,13 +30,13 @@
     "react-redux": "^7.2.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.1",
+    "react-scripts": "3.4.3",
     "redux": "^4.0.5",
     "space-api": "^0.18.2"
   },
   "scripts": {
     "start": "craco start",
-    "start:no-mock": "REACT_APP_DISABLE_MOCK='true' craco start",
+    "start:mock": "cross-env REACT_APP_ENABLE_MOCK='true' craco start",
     "build": "GENERATE_SOURCEMAP=false craco build",
     "test": "craco test",
     "eject": "react-scripts eject"
@@ -57,6 +57,7 @@
     ]
   },
   "devDependencies": {
+    "cross-env": "^7.0.2",
     "miragejs": "^0.1.40"
   }
 }
