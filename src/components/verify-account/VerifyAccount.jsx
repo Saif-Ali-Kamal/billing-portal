@@ -1,19 +1,21 @@
-import React, { useState } from 'react';
-import { Card, Button } from 'antd';
+import React from 'react';
+import { Card, Button, Form } from 'antd';
 import emailSvg from '../../assets/email.svg';
-import OTPInput from 'otp-input-react';
-import './verify-account.css';
+import OtpInputField from '../otp-input-field/OtpInputField';
 
 const VerifyAccount = ({ email = "", handleSubmit, handleResendVerificationCode }) => {
 
   const emailToShow = `${email.slice(0, 2)}${"*".repeat(email.length > 2 ? email.length - 2 : 0)}`
   const canShowEmail = email ? true : false
-  const [otp, setOtp] = useState('')
 
-  const handleSubmitClick = (otp) => {
-    if (otp.length === 6) {
-      handleSubmit(otp)
-    }
+  const [form] = Form.useForm();
+  
+  const handleSubmitClick = () => {
+    form.validateFields().then(values => {
+      if (values.otp.length === 6) {
+        handleSubmit(values.otp)
+      }  
+    })
   }
 
   return (
@@ -26,17 +28,12 @@ const VerifyAccount = ({ email = "", handleSubmit, handleResendVerificationCode 
           <p style={{ marginBottom: '48px' }}>{emailToShow}</p>
         </React.Fragment>}
         {!canShowEmail && <p style={{ marginBottom: '48px' }}>We have sent you a verification code on your email</p>}
-        <OTPInput
-          value={otp}
-          onChange={(code) => setOtp(code)}
-          autofocus
-          OTPLength={6}
-          otpType='number'
-          className='otp-input'
-          inputStyles={{ width: '28px', height: '28px', marginRight: '8px' }}
-        />
-        {otp.length > 0 && otp.length < 6 && <p style={{ color: '#FF4D4F', marginTop: '8px' }}>Please input 6 digit verification code</p>}
-        <Button type="primary" block disabled={otp.length !== 6} size="large" style={{ marginBottom: '16px', marginTop: '32px' }} onClick={() => handleSubmitClick(otp)}>Verify</Button>
+        <Form form={form} onFinish={handleSubmitClick}>
+        <Form.Item name='otp' rules={[{ required: true, message: 'Please input six digit verification code!', len:6 }]}>
+          <OtpInputField />
+        </Form.Item>
+        </Form>
+        <Button type="primary" block size="large" style={{ marginBottom: '16px', marginTop: '32px' }} onClick={handleSubmitClick}>Verify</Button>
         <a onClick={handleResendVerificationCode}>Resend verification code</a>
       </Card>
     </React.Fragment>

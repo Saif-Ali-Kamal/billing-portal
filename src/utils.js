@@ -26,7 +26,7 @@ export function isSetupComplete(state) {
 }
 
 export const notify = (type, title, msg, duration) => {
-  notification[type]({ message: title, description: String(msg), duration: duration });
+  notification[type]({ message: title, description: String(msg), duration: type === 'error' ? 0 : duration });
 }
 
 export function capitalizeFirstCharacter(str) {
