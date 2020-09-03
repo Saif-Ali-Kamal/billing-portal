@@ -17,13 +17,14 @@ const ResetPasswordForm = (props) => {
           <p>Enter the new password along with the verification code that we emailed  you to reset your password.</p>
         </center>
         <Form style={{ marginTop: 24 }} onFinish={handleSubmitClick}>
-          <p><center><b>Verification code</b></center></p>
+          <p><b>Verification code</b></p>
           <Form.Item name='otp' noStyle rules={[{ required: true, message: 'Please input six digit verification code!', len:6 }]}>
             <OtpInputField />
           </Form.Item>
-          <div style={{ marginTop: 8, color: "rgba(0,0,0,0.45)" }}><center>Did not recieve any verification code? <a onClick={props.handleResendVerificationCode}>Resend code</a></center></div>
+          <div style={{ marginTop: 8, color: "rgba(0,0,0,0.45)" }}>Did not recieve any verification code? <a onClick={props.handleResendVerificationCode}>Resend code</a></div>
+          <br/>
           <p><b>New password</b></p>
-          <PasswordField />
+          <PasswordField fieldName="password" />
           <Form.Item style={{ marginTop: 16 }} noStyle>
             <Button type='primary' block size="large" style={{ marginTop:'32px' }} htmlType="submit">Reset password</Button>
           </Form.Item>

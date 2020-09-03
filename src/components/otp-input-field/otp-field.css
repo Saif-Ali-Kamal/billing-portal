@@ -1,5 +1,8 @@
-.otp-input-container{
+.otp-input-container {
   display: flex;
+}
+
+.otp-input-container.justify-center {
   justify-content: center;
 }
 
@@ -7,7 +10,9 @@
   border: 1px solid #D9D9D9;
 }
 
+.otp-input-container .otp-input:active, 
 .otp-input-container .otp-input:hover, 
 .otp-input-container .otp-input:focus {
-  border: 1px solid #FF6700;
+  border: 1px solid #FF6700 !important;
+  outline: none !important;
 }

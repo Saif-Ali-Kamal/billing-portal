@@ -27,11 +27,11 @@ const SignupForm = (props) => {
             <Input placeholder="Your organization name" />
           </Form.Item>
           <p><b>Email</b></p>
-          <Form.Item name='email' rules={[{ type:'email', required: true, message: 'Please input your professional email address' }]}>
+          <Form.Item name='email' rules={[{ type: 'email', required: true, message: 'Please input your professional email address' }]}>
             <Input type='email' placeholder="Your professional email address" />
           </Form.Item>
           <p><b>Password</b></p>
-          <PasswordField />
+          <PasswordField fieldName="password" />
           <div style={{ paddingTop: "16px" }}>
             <Tooltip title={!termsServices ? "Click on terms of service" : ""}>
               <Checkbox disabled={!termsServices} onChange={(e) => setChecked(e.target.checked)} style={{ marginTop: 16 }} checked={checked}>

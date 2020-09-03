@@ -9,12 +9,12 @@ const VerifyAccount = ({ email = "", handleSubmit, handleResendVerificationCode 
   const canShowEmail = email ? true : false
 
   const [form] = Form.useForm();
-  
+
   const handleSubmitClick = () => {
     form.validateFields().then(values => {
       if (values.otp.length === 6) {
         handleSubmit(values.otp)
-      }  
+      }
     })
   }
 
@@ -29,9 +29,9 @@ const VerifyAccount = ({ email = "", handleSubmit, handleResendVerificationCode 
         </React.Fragment>}
         {!canShowEmail && <p style={{ marginBottom: '48px' }}>We have sent you a verification code on your email</p>}
         <Form form={form} onFinish={handleSubmitClick}>
-        <Form.Item name='otp' rules={[{ required: true, message: 'Please input six digit verification code!', len:6 }]}>
-          <OtpInputField />
-        </Form.Item>
+          <Form.Item name='otp' rules={[{ required: true, message: 'Please input six digit verification code!', len: 6 }]}>
+            <OtpInputField center />
+          </Form.Item>
         </Form>
         <Button type="primary" block size="large" style={{ marginBottom: '16px', marginTop: '32px' }} onClick={handleSubmitClick}>Verify</Button>
         <a onClick={handleResendVerificationCode}>Resend verification code</a>

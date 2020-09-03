@@ -8,7 +8,7 @@ const ChangePassword = ({ handleSubmit, handleCancel }) => {
   const handleOk = () => {
     form.validateFields()
       .then((values) => {
-        handleSubmit(values.currentPassword, values.password)
+        handleSubmit(values.currentPassword, values.newPassword)
           .then(() => handleCancel())
       })
   }
@@ -25,7 +25,7 @@ const ChangePassword = ({ handleSubmit, handleCancel }) => {
           <Input.Password placeholder='Current password' />
         </Form.Item>
         <p><b>New password</b></p>
-        <PasswordField />
+        <PasswordField fieldName="newPassword"/>
       </Form>
     </Modal>
   );
